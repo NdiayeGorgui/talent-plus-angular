@@ -1,0 +1,33 @@
+<div class="stats-container">
+  <h2>📊 Statistiques</h2>
+
+  <!-- Pie Chart -->
+  <div class="chart-card">
+    <h3>Candidatures par statut</h3>
+    <canvas baseChart
+            [data]="statutData"
+            [options]="statutOptions"
+            chartType="pie">
+    </canvas>
+  </div>
+
+  <!-- Bar Chart -->
+  <div class="chart-card">
+    <h3>Candidatures par mois</h3>
+    <canvas baseChart
+            [data]="moisData"
+            [options]="moisOptions"
+            chartType="bar">
+    </canvas>
+  </div>
+
+  <!-- Horizontal Bar Chart -->
+  <div class="chart-card">
+    <h3>Compétences les plus fréquentes</h3>
+    <canvas baseChart
+            [data]="competenceData"
+            [options]="competenceOptions"
+            chartType="bar">
+    </canvas>
+  </div>
+</div>

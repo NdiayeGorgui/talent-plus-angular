@@ -1,0 +1,46 @@
+<div class="container">
+  <h2>Liste des recruteurs</h2>
+
+  <button mat-raised-button color="primary" routerLink="/recruteurs/create">
+    ➕ Ajouter un recruteur
+  </button>
+
+  <div *ngIf="isLoading">Chargement en cours...</div>
+
+  <table mat-table [dataSource]="recruteurs" class="mat-elevation-z8" *ngIf="!isLoading && recruteurs.length > 0">
+
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let r"> {{r.id}} </td>
+    </ng-container>
+
+    <!-- Nom -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef> Nom </th>
+      <td mat-cell *matCellDef="let r"> {{r.nom}} </td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let r"> {{r.email}} </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let r">
+        <button mat-button color="accent" [routerLink]="['/recruteurs', r.id]">👁️ Voir</button>
+        <button mat-button color="warn" (click)="deleteRecruteur(r.id!)">🗑️ Supprimer</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <p *ngIf="!isLoading && recruteurs.length === 0">
+    Aucun recruteur trouvé.
+  </p>
+</div>

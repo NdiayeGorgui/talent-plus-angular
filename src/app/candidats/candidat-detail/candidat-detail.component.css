@@ -1,0 +1,32 @@
+mat-card {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+mat-card-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.experience-item {
+  white-space: normal !important;
+  align-items: flex-start !important;
+}
+
+.experience-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.description {
+  margin-top: 4px;
+  line-height: 1.4;
+}

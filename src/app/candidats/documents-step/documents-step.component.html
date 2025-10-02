@@ -1,0 +1,35 @@
+<div class="documents-step"> 
+  <h3>📎 Déposer vos documents</h3>
+
+  <!-- === CV === -->
+  <div class="file-upload">
+    <input id="cv" type="file" (change)="onCvSelected($event)">
+    <label for="cv">
+      <mat-icon>upload_file</mat-icon>
+    </label>
+  </div>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Titre du CV</mat-label>
+    <input matInput [(ngModel)]="cvTitre" (ngModelChange)="emitValid()" placeholder="Ex: CV développeur Java">
+  </mat-form-field>
+
+  <!-- === Lettre === -->
+  <div class="file-upload">
+    <input id="lettre" type="file" (change)="onLettreSelected($event)">
+    <label for="lettre">
+      <mat-icon>upload_file</mat-icon>
+    </label>
+  </div>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Titre de la lettre de motivation</mat-label>
+    <input matInput [(ngModel)]="lettreTitre" (ngModelChange)="emitValid()" placeholder="Ex: Lettre pour offre Angular">
+  </mat-form-field>
+
+  <!-- Résumé -->
+  <div class="resume" *ngIf="cv || lettre">
+    <p *ngIf="cv">📄 CV : {{ cv.name }} (Titre: {{ cvTitre || '–' }})</p>
+    <p *ngIf="lettre">✉️ Lettre : {{ lettre.name }} (Titre: {{ lettreTitre || '–' }})</p>
+  </div>
+</div>
+
+

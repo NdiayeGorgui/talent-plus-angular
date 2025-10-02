@@ -1,0 +1,8 @@
+export enum StatutProcessus {
+  RECU = 'RECU',
+  ENTRETIEN = 'ENTRETIEN',
+  PROPOSITION = 'PROPOSITION',
+  ACCEPTE = 'ACCEPTE',
+  REFUSE = 'REFUSE',
+  NON_RETENU = 'NON_RETENU'
+}

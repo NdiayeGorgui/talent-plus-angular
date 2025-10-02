@@ -1,0 +1,35 @@
+/* Table responsive avec scroll si besoin */
+table {
+  width: 100%;
+  table-layout: auto; /* ajuste automatiquement */
+  border-collapse: collapse;
+  white-space: nowrap; /* empêche le retour à la ligne */
+}
+
+/* Les cellules prennent la largeur nécessaire */
+th, td {
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Actions flexibles en ligne */
+td.mat-cell:last-child {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px; /* espace entre boutons */
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 300px; /* largeur minimale pour caser les boutons */
+  overflow-x: auto; /* si trop de boutons, scroll horizontal */
+}
+
+/* Les chips restent sur une seule ligne */
+mat-chip {
+  max-width: 140px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+

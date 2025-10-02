@@ -1,0 +1,57 @@
+.recruteur-detail-container {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recruteur-detail-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1976d2; /* Couleur principale Angular Material */
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+mat-form-field {
+  display: block;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+button[mat-raised-button] {
+  font-weight: 600;
+  padding: 6px 18px;
+}
+
+button[mat-button] {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .recruteur-detail-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,69 @@
+<div class="container">
+  <h2>Liste des offres</h2>
+
+  <button mat-raised-button color="primary" routerLink="/offres/create">
+    ➕ Ajouter une offre
+  </button>
+
+  <div *ngIf="isLoading">Chargement en cours...</div>
+
+  <table mat-table [dataSource]="offres" class="mat-elevation-z8" *ngIf="!isLoading && offres.length > 0">
+
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let o"> {{o.id}} </td>
+    </ng-container>
+
+    <!-- Titre -->
+    <ng-container matColumnDef="titre">
+      <th mat-header-cell *matHeaderCellDef> Titre </th>
+      <td mat-cell *matCellDef="let o"> {{o.titre}} </td>
+    </ng-container>
+
+    <!-- Categorie -->
+    <ng-container matColumnDef="categorie">
+      <th mat-header-cell *matHeaderCellDef> Categorie </th>
+      <td mat-cell *matCellDef="let o"> {{o.categorie}} </td>
+    </ng-container>
+
+     <!-- Ville -->
+    <ng-container matColumnDef="ville">
+      <th mat-header-cell *matHeaderCellDef> Ville </th>
+      <td mat-cell *matCellDef="let o"> {{o.ville}} </td>
+    </ng-container>
+
+
+    <!-- Pays -->
+    <ng-container matColumnDef="datePublication">
+      <th mat-header-cell *matHeaderCellDef> Date publication </th>
+      <td mat-cell *matCellDef="let o"> {{o.datePublication | date:'short'}} </td>
+    </ng-container>
+
+    <!-- Active -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef> Active </th>
+      <td mat-cell *matCellDef="let o">
+        <mat-icon color="{{ o.active ? 'primary' : 'warn' }}">
+          {{ o.active ? 'check_circle' : 'cancel' }}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let o">
+        <button mat-button color="accent" (click)="viewOffre(o.id!)">👁️ Voir</button>
+        <button mat-button color="warn" (click)="deleteOffre(o.id!)">🗑️ Supprimer</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <p *ngIf="!isLoading && offres.length === 0">
+    Aucune offre trouvée.
+  </p>
+</div>

@@ -1,0 +1,41 @@
+<div [formGroup]="experienceForm">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Poste</mat-label>
+    <input matInput formControlName="poste" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Entreprise</mat-label>
+    <input matInput formControlName="entreprise" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Date début</mat-label>
+    <input matInput type="date" formControlName="dateDebut" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Date fin</mat-label>
+    <input matInput type="date" formControlName="dateFin" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-flat-button color="primary" (click)="addExperience()">Ajouter</button>
+  </div>
+</div>
+
+<ul>
+  <li *ngFor="let e of experiences; let i = index">
+    {{ e.poste }} chez {{ e.entreprise }} ({{ e.dateDebut }} - {{ e.dateFin || 'En cours' }})
+    <button mat-icon-button color="warn" (click)="removeExperience(i)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </li>
+</ul>
+
+

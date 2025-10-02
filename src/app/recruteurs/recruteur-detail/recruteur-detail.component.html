@@ -1,0 +1,53 @@
+<div class="recruteur-detail-container">
+    <h2>Détails du recruteur</h2>
+
+    <form [formGroup]="recruteurForm" (ngSubmit)="onUpdate()">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="nom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prénom</mat-label>
+            <input matInput formControlName="prenom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" />
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Poste</mat-label>
+            <input matInput formControlName="poste" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Niveau</mat-label>
+            <mat-select formControlName="niveau" required>
+                <mat-option *ngFor="let niv of niveaux" [value]="niv">
+                    {{ niv }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="recruteurForm.get('niveau')?.hasError('required')">
+                Niveau requis
+            </mat-error>
+        </mat-form-field>
+
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+                {{ loading ? 'Mise à jour...' : 'Modifier' }}
+            </button>
+            <button mat-button color="warn" type="button" (click)="router.navigate(['/recruteurs'])">
+                Annuler
+            </button>
+        </div>
+    </form>
+</div>

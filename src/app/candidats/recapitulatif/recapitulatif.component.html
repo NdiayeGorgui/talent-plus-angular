@@ -1,0 +1,22 @@
+<h3>Récapitulatif de votre candidature</h3>
+
+<p><strong>Nom :</strong> {{ candidat?.nom }} {{ candidat?.prenom }}</p>
+<p><strong>Email :</strong> {{ candidat?.email }}</p>
+<p><strong>Téléphone :</strong> {{ candidat?.telephone }}</p>
+<p><strong>Adresse :</strong> {{ candidat?.adresse }}</p>
+
+<h4>Compétences</h4>
+<ul>
+  <li *ngFor="let c of competences">{{ c.libelle }} ({{ c.niveau }})</li>
+</ul>
+
+<h4>Expériences</h4>
+<ul>
+  <li *ngFor="let e of experiences">
+    {{ e.poste }} chez {{ e.entreprise }} ({{ e.dateDebut }} - {{ e.dateFin || 'En cours' }})
+  </li>
+</ul>
+
+<h4>Documents</h4>
+<p *ngIf="cv">📄 CV : {{ cv.titre }}</p>
+<p *ngIf="lettre">✉️ Lettre : {{ lettre.titre }}</p>

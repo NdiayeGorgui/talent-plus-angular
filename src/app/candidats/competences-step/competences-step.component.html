@@ -1,0 +1,35 @@
+<div [formGroup]="competenceForm">
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Libellé</mat-label>
+  <mat-select formControlName="libelle">
+    <mat-option *ngFor="let comp of competenceOptions" [value]="comp">
+      {{ comp }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Niveau</mat-label>
+    <mat-select formControlName="niveau">
+      <mat-option value="DEBUTANT">Débutant</mat-option>
+      <mat-option value="INTERMEDIAIRE">Intermédiaire</mat-option>
+      <mat-option value="EXPERT">Expert</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-flat-button color="primary" (click)="addCompetence()">Ajouter</button>
+  </div>
+</div>
+
+<ul>
+  <li *ngFor="let c of competences; let i = index">
+    {{ c.libelle }} - {{ c.niveau }}
+    <button mat-icon-button color="warn" (click)="removeCompetence(i)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </li>
+</ul>
+
+

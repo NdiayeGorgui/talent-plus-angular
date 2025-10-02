@@ -1,0 +1,58 @@
+<div class="container">
+  <h2>Liste des candidats</h2>
+
+ <!--  <button mat-raised-button color="primary" routerLink="/candidats/create">
+    ➕ Ajouter un candidat
+  </button> -->
+
+  <div *ngIf="isLoading">Chargement en cours...</div>
+
+  <table mat-table [dataSource]="candidats" class="mat-elevation-z8" *ngIf="!isLoading && candidats.length > 0">
+
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let c"> {{c.id}} </td>
+    </ng-container>
+
+    <!-- Nom -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef> Nom </th>
+      <td mat-cell *matCellDef="let c"> {{c.nom}} </td>
+    </ng-container>
+
+    <!-- Prénom -->
+    <ng-container matColumnDef="prenom">
+      <th mat-header-cell *matHeaderCellDef> Prénom </th>
+      <td mat-cell *matCellDef="let c"> {{c.prenom}} </td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let c"> {{c.email}} </td>
+    </ng-container>
+
+    <!-- Téléphone -->
+    <ng-container matColumnDef="telephone">
+      <th mat-header-cell *matHeaderCellDef> Téléphone </th>
+      <td mat-cell *matCellDef="let c"> {{c.telephone}} </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let c">
+        <button mat-button color="accent" [routerLink]="['/candidats', c.id]">👁️ Voir</button>
+        <button mat-button color="warn" (click)="deleteCandidat(c.id!)">🗑️ Supprimer</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <p *ngIf="!isLoading && candidats.length === 0">
+    Aucun candidat trouvé.
+  </p>
+</div>

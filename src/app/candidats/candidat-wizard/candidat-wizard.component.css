@@ -1,0 +1,19 @@
+mat-progress-bar {
+  margin-bottom: 24px; /* espace entre la barre et les champs */
+}
+
+/* ✅ Crée un espace entre le stepper et les champs */
+.stepper-container {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+/* ✅ Donne de l’espace entre les champs de formulaire */
+mat-form-field.full-width {
+  display: block;
+  width: 100%;
+  margin-bottom: 24px; /* Ajoute de l'espace vertical entre les champs */
+}
+
+
+

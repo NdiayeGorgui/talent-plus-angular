@@ -1,0 +1,68 @@
+<div class="create-recruteur-container">
+  <h2>Créer un recruteur</h2>
+
+  <form [formGroup]="recruteurForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" required />
+      <mat-error *ngIf="recruteurForm.get('nom')?.hasError('required')">
+        Nom requis
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="prenom" required />
+      <mat-error *ngIf="recruteurForm.get('prenom')?.hasError('required')">
+        Prénom requis
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" required />
+      <mat-error *ngIf="recruteurForm.get('email')?.hasError('required')">
+        Email requis
+      </mat-error>
+      <mat-error *ngIf="recruteurForm.get('email')?.hasError('email')">
+        Email invalide
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone" required />
+      <mat-error *ngIf="recruteurForm.get('telephone')?.hasError('required')">
+        Téléphone requis
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Poste</mat-label>
+      <input matInput formControlName="poste" />
+    </mat-form-field>
+
+   <mat-form-field appearance="outline" class="full-width">
+  <mat-label>Niveau</mat-label>
+  <mat-select formControlName="niveau" required>
+    <mat-option *ngFor="let niv of niveaux" [value]="niv">
+      {{ niv }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="recruteurForm.get('niveau')?.hasError('required')">
+    Niveau requis
+  </mat-error>
+</mat-form-field>
+
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+        {{ loading ? 'Enregistrement...' : 'Créer' }}
+      </button>
+      <button mat-button color="warn" type="button" (click)="router.navigate(['/recruteurs'])">
+        Annuler
+      </button>
+    </div>
+  </form>
+</div>

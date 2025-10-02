@@ -1,0 +1,53 @@
+<div class="p-4">
+  <h2>📋 Processus des recrutements</h2>
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <table mat-table [dataSource]="processusList" class="mat-elevation-z8 w-full">
+
+    <!-- Candidat -->
+    <ng-container matColumnDef="candidat">
+      <th mat-header-cell *matHeaderCellDef> Candidat </th>
+      <td mat-cell *matCellDef="let p"> {{p.candidatId}} </td>
+    </ng-container>
+
+    <!-- Offre -->
+    <ng-container matColumnDef="offre">
+      <th mat-header-cell *matHeaderCellDef> Offre </th>
+      <td mat-cell *matCellDef="let p"> {{p.offreId}} </td>
+    </ng-container>
+
+   <!-- Statut -->
+<ng-container matColumnDef="statut">
+  <th mat-header-cell *matHeaderCellDef> Statut </th>
+  <td mat-cell *matCellDef="let p">
+    <mat-chip [color]="getChipColor(p.statut)" selected>
+      {{ mapStatutLabel(p.statut) }}
+    </mat-chip>
+  </td>
+</ng-container>
+
+
+    <!-- Date -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let p"> {{p.dateMaj | date:'short'}} </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-button color="primary" (click)="changerStatut(p, 'ENTRETIEN')">📞 Entretien</button> 
+        <button mat-button color="primary" (click)="changerStatut(p, 'NON_RETENU')">🚫 Non retenu</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'PROPOSITION')">🤝 Proposition</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'ACCEPTE')">✅ Accepter</button>
+        <button mat-button color="warn" (click)="changerStatut(p, 'REFUSE')">❌ Refuser</button>
+        <button mat-button color="accent" (click)="voirHistorique(p)">🕓 Historique</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

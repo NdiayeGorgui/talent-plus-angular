@@ -1,0 +1,120 @@
+<div class="wizard-root">
+    <h1>Postuler à l’offre</h1>
+
+    <!-- 🔹 Barre de progression -->
+    <mat-progress-bar mode="determinate" [value]="(stepper.selectedIndex + 1) * 20">
+    </mat-progress-bar>
+
+    <!-- ✅ Encadré avec marge -->
+    <div class="stepper-container">
+        <mat-horizontal-stepper linear #stepper>
+
+            <!-- Étape 1 -->
+            <mat-step [stepControl]="candidatForm">
+                <form [formGroup]="candidatForm" style="margin-top: 32px;">
+
+                    <ng-template matStepLabel>Informations personnelles</ng-template>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nom</mat-label>
+                        <input matInput formControlName="nom">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Prénom</mat-label>
+                        <input matInput formControlName="prenom">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" formControlName="email">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Téléphone</mat-label>
+                        <input matInput formControlName="telephone">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Date de naissance</mat-label>
+                        <input matInput type="date" formControlName="dateNaissance">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Adresse</mat-label>
+                        <input matInput formControlName="adresse">
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-raised-button matStepperNext [disabled]="!candidatForm.valid">
+                            Suivant
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <!-- Étape 2 -->
+            <mat-step>
+                <ng-template matStepLabel>Compétences</ng-template>
+                <div style="margin-top: 32px;">
+                    <app-competences-step (valid)="onCompetencesSaved($event)" (next)="stepper.next()"
+                        (previous)="stepper.previous()">
+                    </app-competences-step>
+                </div>
+                <div class="step-footer">
+                    <button mat-raised-button matStepperPrevious>Précédent</button>
+                    <button mat-raised-button (click)="stepper.next()">Suivant</button>
+                </div>
+            </mat-step>
+
+            <!-- Étape 3 -->
+            <mat-step>
+                <ng-template matStepLabel>Expériences</ng-template>
+                <div style="margin-top: 32px;">
+                    <app-experiences-step (valid)="onExperiencesSaved($event)" (next)="stepper.next()"
+                        (previous)="stepper.previous()">
+                    </app-experiences-step>
+                </div>
+
+                <div class="step-footer">
+                    <button mat-raised-button matStepperPrevious>Précédent</button>
+                    <button mat-raised-button (click)="stepper.next()">Suivant</button>
+                </div>
+            </mat-step>
+
+            <!-- Étape 4 -->
+            <mat-step>
+                <ng-template matStepLabel>CV & Lettre</ng-template>
+                <div style="margin-top: 32px;">
+                    <app-documents-step (valid)="onDocumentsSaved($event)" (next)="stepper.next()"
+                        (previous)="stepper.previous()">
+                    </app-documents-step>
+                </div>
+
+                <div class="step-footer">
+                    <button mat-raised-button matStepperPrevious>Précédent</button>
+                    <button mat-raised-button (click)="stepper.next()">Suivant</button>
+                </div>
+            </mat-step>
+
+            <!-- Étape 5 -->
+            <mat-step>
+                <ng-template matStepLabel>Récapitulatif</ng-template>
+
+                <div style="margin-top: 32px;">
+                    <app-recapitulatif [candidat]="candidatForm.value" [competences]="competences"
+                        [experiences]="experiences" [cv]="cv" [lettre]="lettre">
+                    </app-recapitulatif>
+                </div>
+
+
+                <div class="step-footer">
+                    <button mat-raised-button matStepperPrevious>Précédent</button>
+                    <button mat-raised-button color="warn" (click)="annuler()">Annuler</button>
+                    <button mat-raised-button color="accent" (click)="submit()">Postuler</button>
+                </div>
+            </mat-step>
+
+        </mat-horizontal-stepper>
+    </div>
+</div>

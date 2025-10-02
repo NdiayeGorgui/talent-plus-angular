@@ -1,0 +1,71 @@
+<!-- Barre de navigation -->
+<mat-toolbar color="primary" class="toolbar">
+  <span class="logo">Talent+</span>
+  <span class="spacer"></span>
+
+  <button mat-button routerLink="/">Accueil</button>
+  <button mat-button routerLink="/offres">Offres</button>
+  <button mat-button routerLink="/candidats">Candidats</button>
+  <button mat-button routerLink="/candidats/create">Candidatures spontanées</button>
+  <button mat-button routerLink="/recruteurs">Recruteurs</button>
+  <button mat-button routerLink="/recrutements">Suivi des candidatures</button>
+  <button mat-button routerLink="/dashboard">Tableau de bord</button>
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button aria-label="Notifications">
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Connexion">
+    <mat-icon>login</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!-- Layout principal -->
+<div class="layout-body">
+  <!-- Colonne gauche -->
+  <aside class="side-column left-column">
+    <h3>Avantages candidats</h3>
+    <ul>
+      <li>Accès aux offres IT récentes</li>
+      <li>Suivi des candidatures</li>
+      <li>Notifications personnalisées</li>
+      <li>Conseils pour les entretiens</li>
+      <li>Centralisation CV et documents</li>
+    </ul>
+
+    <!-- Image gauche -->
+    <div class="image-column">
+      <img src="assets/images/gauche.jpg" alt="Image gauche">
+    </div>
+  </aside>
+
+  <!-- Contenu central -->
+  <main class="main-content">
+    <div class="content-inner">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Colonne droite -->
+  <aside class="side-column right-column">
+    <h3>Avantages recruteurs</h3>
+    <ul>
+      <li>Accès à un vivier de talents qualifiés</li>
+      <li>Filtrage rapide des profils</li>
+      <li>Suivi précis des candidatures</li>
+      <li>Tableau de bord statistique</li>
+      <li>Gain de temps sur le recrutement</li>
+    </ul>
+
+    <!-- Image droite -->
+    <div class="image-column">
+      <img src="assets/images/droite.jpg" alt="Image droite">
+    </div>
+  </aside>
+</div>
+
+<!-- Pied de page -->
+<footer class="footer">
+  © 2025 Talent+ — Plateforme de recrutement IT
+</footer>

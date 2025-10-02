@@ -1,0 +1,107 @@
+/* toolbar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.logo { font-weight: bold; font-size: 20px; }
+.spacer { flex: 1 1 auto; }
+
+/* layout principal */
+.layout-body {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  min-height: calc(100vh - 64px - 56px); /* toolbar (≈64px) et footer (≈56px) */
+  box-sizing: border-box;
+}
+
+/* sidebars */
+.side-column {
+  width: 220px;
+  padding: 18px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  align-self: flex-start;
+}
+.side-column h3 { color: #3f51b5; margin-bottom: 10px; }
+.side-column ul { padding-left: 18px; }
+
+/* zone centrale qui contient les pages (max-width pour centrer) */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.content-inner {
+  width: 100%;
+  max-width: 980px;   /* <-- important: limite largeur centrale */
+}
+
+/* footer */
+.footer {
+  text-align: center;
+  padding: 14px 8px;
+  background: #3f51b5;
+  color: #fff;
+  margin-top: 16px;
+  font-size: 14px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+/* responsive */
+@media (max-width: 1000px) {
+  .layout-body { flex-direction: column; align-items: center; min-height: auto; }
+  .side-column { width: 90%; margin-bottom: 18px; }
+  .main-content { width: 100%; }
+  .content-inner { max-width: 100%; padding: 0 10px; }
+}
+
+
+.image-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px 24px 24px;
+  margin-top: -12px; /* réduit l’espace entre les colonnes et les images */
+}
+
+.image-column {
+  width: 220px;
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.image-column img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.left-image {
+  margin-left: 0;
+}
+
+.right-image {
+  margin-right: 0;
+}
+
+@media (max-width: 1000px) {
+  .image-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .image-column {
+    width: 90%;
+  }
+}
+
+.image-column {
+  margin-top: 12px;
+}

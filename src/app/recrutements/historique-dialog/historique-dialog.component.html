@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Historique du processus #{{data.processus.id}}</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let h of data.historique">
+      <b>{{h.dateChangement | date:'short'}}</b> → 
+      {{h.statut}} (par {{h.recruteur}})
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fermer</button>
+</mat-dialog-actions>

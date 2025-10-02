@@ -1,0 +1,101 @@
+<div *ngIf="isLoading" class="flex justify-center items-center p-6">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!isLoading && candidat" class="p-6 space-y-6">
+
+
+  <!-- Infos principales -->
+  <mat-card>
+    <mat-card-actions> <button mat-raised-button color="primary" [routerLink]="['/recrutements/candidat', candidat.id]">
+        Voir processus
+      </button></mat-card-actions>
+    <mat-card-header>
+
+      <mat-card-title>{{ candidat.prenom }} {{ candidat.nom }}</mat-card-title>
+      <mat-card-subtitle>{{ candidat.email }} • {{ candidat.telephone }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Date de naissance :</strong> {{ candidat.dateNaissance | date }}</p>
+      <p><strong>Adresse :</strong> {{ candidat.adresse }}</p>
+      <p><strong>Disponibilité :</strong> {{ candidat.disponibilite }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="goBack()">⬅ Retour</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- CVs -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>📄 CVs</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item *ngFor="let cv of candidat.cvs">
+        <button mat-button color="primary" (click)="downloadCv(cv.id!, cv.titre)">
+          {{ cv.titre }}
+        </button>
+        <span class="ml-auto text-sm text-gray-500">
+          Version {{ cv.version }} - {{ cv.dateDepot | date }}
+        </span>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <!-- Lettres -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>✉️ Lettres de motivation</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item *ngFor="let lettre of candidat.lettres">
+        <button mat-button color="accent" (click)="downloadLettre(lettre.id!, lettre.titre)">
+          {{ lettre.titre }}
+        </button>
+        <span class="ml-auto text-sm text-gray-500">
+          Version {{ lettre.version }} - {{ lettre.dateDepot | date }}
+        </span>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+
+  <!-- Expériences -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>💼 Expériences</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item *ngFor="let exp of candidat.experiences" class="experience-item">
+        <div class="experience-content">
+          <strong>{{ exp.poste }}</strong> &#64; {{ exp.entreprise }}
+          <div class="text-sm text-gray-500">
+            {{ exp.dateDebut | date }} - {{ exp.dateFin | date }}
+          </div>
+          <div *ngIf="exp.description" class="description">
+            {{ exp.description }}
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <!-- Compétences -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>🛠️ Compétences</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item *ngFor="let comp of candidat?.competences">
+        <div>
+          <strong>{{ comp.libelle }}</strong>
+          <span class="ml-4 text-sm text-gray-600">
+            • Niveau : {{ mapNiveau(comp.niveau) }}
+          </span>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+</div>

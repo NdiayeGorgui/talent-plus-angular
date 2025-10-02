@@ -1,0 +1,140 @@
+<div class="container" *ngIf="!isLoading && offre">
+  <h2>Détail de l'offre</h2>
+
+  <mat-card class="offre-card">
+    <div class="card-header">
+      <mat-card-title>
+        <ng-container *ngIf="!isEditing">{{ offre.titre }}</ng-container>
+        <ng-container *ngIf="isEditing">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Titre de l'offre</mat-label>
+            <textarea matInput [(ngModel)]="offre.titre" rows="2" cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="2"
+                      cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </ng-container>
+      </mat-card-title>
+
+      <!-- POSTULER visible uniquement quand NOT editing ET offre active -->
+      <button *ngIf="offre?.active && !isEditing"
+              mat-raised-button color="primary"
+              class="postuler-button"
+              (click)="goToWizard()">
+        📩 Postuler
+      </button>
+    </div>
+
+    <mat-card-subtitle>
+      Publiée le {{ offre.datePublication | date:'longDate' }}
+    </mat-card-subtitle>
+
+    <mat-card-content>
+
+      <!-- VILLE, PAYS, CATEGORIE sur la même ligne -->
+      <div *ngIf="!isEditing" style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <p><strong>Ville :</strong> {{ offre.ville }}</p>
+        <p><strong>Pays :</strong> {{ offre.pays }}</p>
+        <p><strong>Catégorie :</strong> {{ offre.categorie }}</p>
+      </div>
+
+      <div *ngIf="isEditing" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <mat-form-field appearance="outline" style="flex: 1; min-width: 150px;">
+          <mat-label>Ville</mat-label>
+          <input matInput [(ngModel)]="offre.ville" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="flex: 1; min-width: 150px;">
+          <mat-label>Pays</mat-label>
+          <input matInput [(ngModel)]="offre.pays" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="flex: 1; min-width: 150px;">
+          <mat-label>Catégorie</mat-label>
+          <input matInput [(ngModel)]="offre.categorie" />
+        </mat-form-field>
+      </div>
+
+     <!-- DESCRIPTION -->
+<p><strong>Description du poste:</strong></p>
+
+<ng-container *ngIf="!isEditing">
+  <div [innerHTML]="offre.description"></div>
+</ng-container>
+
+<ng-container *ngIf="isEditing">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea matInput rows="8" [(ngModel)]="offre.description"></textarea>
+  </mat-form-field>
+</ng-container>
+
+      <!-- RECRUTEUR -->
+      <p><strong>Recruteur :</strong></p>
+
+      <!-- Lecture seule -->
+      <ng-container *ngIf="!isEditing">
+        <div *ngIf="recruteur">
+          <p><strong>Nom :</strong> {{ recruteur.prenom }} {{ recruteur.nom }}</p>
+          <p><strong>Email :</strong> {{ recruteur.email }}</p>
+          <p><strong>Téléphone :</strong> {{ recruteur.telephone }}</p>
+          <p *ngIf="recruteur.poste"><strong>Poste :</strong> {{ recruteur.poste }}</p>
+        </div>
+        <p *ngIf="!recruteur">Recruteur introuvable (ID: {{ offre.recruteurId }})</p>
+      </ng-container>
+
+      <!-- Edition -->
+      <ng-container *ngIf="isEditing && recruteurs.length && offre">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Recruteur</mat-label>
+          <mat-select [(ngModel)]="offre.recruteurId" name="recruteurId">
+            <mat-option *ngFor="let r of recruteurs" [value]="r.id">
+              {{ r.prenom }} {{ r.nom }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <!-- STATUT -->
+      <p><strong>Statut : </strong>
+        <mat-chip color="{{ offre.active ? 'primary' : 'warn' }}" selected>
+          {{ offre.active ? 'Active' : 'Désactivée' }}
+        </mat-chip>
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button mat-stroked-button color="primary" (click)="goBack()">🔙 Retour</button>
+
+    <!-- Actions lecture seule -->
+    <ng-container *ngIf="!isEditing">
+      <button mat-raised-button color="accent" (click)="goToEdit()">✏️ Modifier</button>
+
+      <button *ngIf="offre?.active" mat-stroked-button color="warn" (click)="closeOffre()">
+        🔒 Désactiver
+      </button>
+
+      <button *ngIf="!offre?.active" mat-stroked-button color="primary" (click)="openOffre()">
+        🔓 Réactiver
+      </button>
+
+      <button *ngIf="offre?.id" mat-raised-button color="accent" [routerLink]="['/recrutements/offre', offre.id]">
+        Voir processus liés
+      </button>
+    </ng-container>
+
+    <!-- Actions édition -->
+    <ng-container *ngIf="isEditing">
+      <button mat-raised-button color="primary" (click)="saveChanges()">💾 Enregistrer</button>
+      <button mat-stroked-button color="warn" (click)="cancelEdit()">❌ Annuler</button>
+    </ng-container>
+  </div>
+</div>
+
+<!-- CHARGEMENT / ERREUR -->
+<div *ngIf="isLoading">Chargement de l'offre...</div>
+<div *ngIf="!isLoading && !offre">
+  <p>Offre introuvable.</p>
+</div>
