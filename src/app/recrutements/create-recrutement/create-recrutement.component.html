@@ -1,1 +1,31 @@
-<p>create-recrutement works!</p>
+<div class="container">
+  <h2>Lier un processus à une offre</h2>
+
+  <form (ngSubmit)="lierOffre()" #lierForm="ngForm">
+    <!-- Processus ID (readonly) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>ID du processus</mat-label>
+      <input
+        matInput
+        name="processusId"
+        [value]="processusId"
+        readonly
+      />
+    </mat-form-field>
+
+    <!-- Sélecteur d'offres -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Choisir une offre</mat-label>
+      <mat-select [(ngModel)]="selectedOffreId" name="offreId" required>
+        <mat-option *ngFor="let offre of offres" [value]="offre.id">
+          {{ offre.id }} - {{ offre.titre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Bouton lier -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="!selectedOffreId">
+      🔗 Lier à l'offre
+    </button>
+  </form>
+</div>

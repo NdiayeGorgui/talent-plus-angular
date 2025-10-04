@@ -33,6 +33,9 @@ import { DocumentsStepComponent } from './candidats/documents-step/documents-ste
 import { RecapitulatifComponent } from './candidats/recapitulatif/recapitulatif.component';
 import { RecrutementsListComponent } from './recrutements/recrutements-list/recrutements-list.component';
 import { HistoriqueDialogComponent } from './recrutements/historique-dialog/historique-dialog.component';
+import { MetadonneeRhStepComponent } from './candidats/metadonnee-rh-step/metadonnee-rh-step.component';
+import { CandidatureSpontaneeComponent } from './candidats/candidature-spontanee/candidature-spontanee.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 @NgModule({
@@ -57,12 +60,16 @@ import { HistoriqueDialogComponent } from './recrutements/historique-dialog/hist
 
 
     LayoutComponent,
-        CompetencesStepComponent,
-        ExperiencesStepComponent,
-        DocumentsStepComponent,
-        RecapitulatifComponent,
-        RecrutementsListComponent,
-        HistoriqueDialogComponent
+    CompetencesStepComponent,
+    ExperiencesStepComponent,
+    DocumentsStepComponent,
+    RecapitulatifComponent,
+    RecrutementsListComponent,
+    HistoriqueDialogComponent,
+    MetadonneeRhStepComponent,
+    CandidatureSpontaneeComponent,
+    ProfilComponent,
+    
   ],
   imports: [
     BrowserModule,

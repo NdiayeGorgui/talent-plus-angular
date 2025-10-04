@@ -20,3 +20,15 @@
 <h4>Documents</h4>
 <p *ngIf="cv">📄 CV : {{ cv.titre }}</p>
 <p *ngIf="lettre">✉️ Lettre : {{ lettre.titre }}</p>
+
+<h4>Métadonnées RH</h4>
+<div *ngIf="metadonneeRH">
+  <p><strong>Domaine de recherche :</strong> {{ metadonneeRH.domaineRecherche }}</p>
+  <p><strong>Type de contrat :</strong> {{ metadonneeRH.typeContrat }}</p>
+  <p><strong>Localisation :</strong> {{ metadonneeRH.localisation }}</p>
+  <p><strong>Disponibilité :</strong> {{ metadonneeRH.disponibilite }}</p>
+  <p><strong>Prétentions salariales :</strong> 
+     {{ metadonneeRH.pretentionsSalariales || 'Non précisé' }}
+  </p>
+  <p><strong>Source :</strong> {{ metadonneeRH.source || 'Non précisé' }}</p>
+</div>

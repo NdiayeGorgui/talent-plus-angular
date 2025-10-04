@@ -33,6 +33,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { CandidatWizardComponent } from './candidats/candidat-wizard/candidat-wizard.component';
 import { RecrutementsListComponent } from './recrutements/recrutements-list/recrutements-list.component';
+import { CandidatureSpontaneeComponent } from './candidats/candidature-spontanee/candidature-spontanee.component';
+import { ProfilComponent } from './profil/profil.component';
 
 const routes: Routes = [
   {
@@ -48,11 +50,17 @@ const routes: Routes = [
       { path: 'candidats/:id', component: CandidatDetailComponent },
       { path: 'candidats/postuler/:offreId', component: CandidatWizardComponent },
 
+       // Candidatures spontanées
+      { path: 'candidature-spontanee', component: CandidatureSpontaneeComponent },
+      { path: 'candidature-spontanee/:candidatId', component: CandidatureSpontaneeComponent },
+      { path: 'candidature/postuler', component: CandidatWizardComponent },
+
      
       // Recruteurs
       { path: 'recruteurs', component: RecruteursListComponent },
       { path: 'recruteurs/create', component: CreateRecruteurComponent },
       { path: 'recruteurs/:id', component: RecruteurDetailComponent },
+     
 
       // Offres
       { path: 'offres', component: OffresListComponent },
@@ -60,11 +68,14 @@ const routes: Routes = [
       { path: 'offres/:id', component: OffreDetailComponent },
 
       // Recrutements
-      { path: 'recrutements/create', component: CreateRecrutementComponent },
+     
       { path: 'recrutements', component: RecrutementsListComponent },                        // liste all
                        
       { path: 'recrutements/candidat/:candidatId', component: RecrutementsListComponent },    // liste filtrée par candidat
       { path: 'recrutements/offre/:offreId', component: RecrutementsListComponent },  
+       { path:'recrutements/lier/:processusId', component: CreateRecrutementComponent},
+       //user
+       { path: 'profil', component: ProfilComponent },
     ],
   },
 

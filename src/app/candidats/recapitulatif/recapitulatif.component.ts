@@ -14,4 +14,5 @@ export class RecapitulatifComponent {
   @Input() experiences!: ExperienceDTO[];
   @Input() cv?: CvDTO;
   @Input() lettre?: LettreDTO;
+   @Input() metadonneeRH: any;
 }

@@ -1,5 +1,5 @@
 <div class="wizard-root">
-    <h1>Postuler à l’offre</h1>
+    <h1>Postuler</h1>
 
     <!-- 🔹 Barre de progression -->
     <mat-progress-bar mode="determinate" [value]="(stepper.selectedIndex + 1) * 20">
@@ -99,19 +99,31 @@
 
             <!-- Étape 5 -->
             <mat-step>
+                <ng-template matStepLabel>Métadonnées RH</ng-template>
+
+                <app-metadonnee-rh-step (valid)="onMetadonneeSaved($event)" (next)="stepper.next()"
+                    (previous)="stepper.previous()">
+                </app-metadonnee-rh-step>
+            </mat-step>
+
+            <!-- Étape 6 -->
+            <mat-step>
                 <ng-template matStepLabel>Récapitulatif</ng-template>
 
                 <div style="margin-top: 32px;">
                     <app-recapitulatif [candidat]="candidatForm.value" [competences]="competences"
-                        [experiences]="experiences" [cv]="cv" [lettre]="lettre">
+                        [experiences]="experiences" [cv]="cv" [lettre]="lettre" [metadonneeRH]="metadonneeRH">
+                        <!-- 🛠 AJOUT ICI -->
                     </app-recapitulatif>
+
                 </div>
 
 
                 <div class="step-footer">
                     <button mat-raised-button matStepperPrevious>Précédent</button>
                     <button mat-raised-button color="warn" (click)="annuler()">Annuler</button>
-                    <button mat-raised-button color="accent" (click)="submit()">Postuler</button>
+                    <button mat-raised-button color="accent" (click)="soumettreCandidature()">Postuler</button>
+                    
                 </div>
             </mat-step>
 

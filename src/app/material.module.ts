@@ -19,7 +19,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -44,7 +44,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatListModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-     MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule,
   ]
 })
 export class MaterialModule {}

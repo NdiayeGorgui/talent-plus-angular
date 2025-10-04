@@ -1,0 +1,10 @@
+.metadonnee-step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actions {
+  margin-top: 20px;
+  text-align: right;
+}

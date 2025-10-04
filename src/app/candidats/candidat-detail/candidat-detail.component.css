@@ -15,18 +15,17 @@ mat-card-actions {
 
 
 .experience-item {
-  white-space: normal !important;
-  align-items: flex-start !important;
+  align-items: flex-start; /* aligne le contenu en haut */
+  white-space: normal;     /* permet les retours à la ligne */
+  height: auto !important; /* s’adapte au contenu */
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .experience-content {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  word-wrap: break-word;
+  overflow: visible;
+  word-wrap: break-word; /* casse les longues phrases */
 }
 
-.description {
-  margin-top: 4px;
-  line-height: 1.4;
-}
+

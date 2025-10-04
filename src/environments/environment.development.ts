@@ -9,6 +9,7 @@ export const environment = {
     backendCvHost:"http://localhost:8888/candidat-service/api/v1/cvs",
 
     backendLettreHost:"http://localhost:8888/candidat-service/api/v1/lettres",
+    backendMetadonneeRhHost:"http://localhost:8888/candidat-service/api/v1/metadonnees",
 
     backendOffreHost:"http://localhost:8888/offre-service/api/v1/offres",
 

@@ -1,9 +1,17 @@
 <div class="container">
   <h2>Liste des offres</h2>
 
+ <div class="action-bar">
   <button mat-raised-button color="primary" routerLink="/offres/create">
     ➕ Ajouter une offre
   </button>
+
+  <button mat-raised-button color="accent" routerLink="/candidature/postuler">
+     <mat-icon>person_search</mat-icon>
+    Candidatures spontanées
+  </button>
+</div>
+
 
   <div *ngIf="isLoading">Chargement en cours...</div>
 
@@ -54,8 +62,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let o">
-        <button mat-button color="accent" (click)="viewOffre(o.id!)">👁️ Voir</button>
-        <button mat-button color="warn" (click)="deleteOffre(o.id!)">🗑️ Supprimer</button>
+        <button mat-button color="accent" (click)="viewOffre(o.id!)" matTooltip="voir details">👁️ Voir</button>
+        <button mat-button color="warn" (click)="deleteOffre(o.id!)" matTooltip="Supprimer">🗑️</button>
       </td>
     </ng-container>
 

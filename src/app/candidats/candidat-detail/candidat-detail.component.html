@@ -18,7 +18,7 @@
     <mat-card-content>
       <p><strong>Date de naissance :</strong> {{ candidat.dateNaissance | date }}</p>
       <p><strong>Adresse :</strong> {{ candidat.adresse }}</p>
-      <p><strong>Disponibilité :</strong> {{ candidat.disponibilite }}</p>
+      <!-- <p><strong>Disponibilité :</strong> {{ candidat.disponibilite }}</p> -->
     </mat-card-content>
     <mat-card-actions>
       <button mat-stroked-button color="primary" (click)="goBack()">⬅ Retour</button>
@@ -66,19 +66,26 @@
       <mat-panel-title>💼 Expériences</mat-panel-title>
     </mat-expansion-panel-header>
 
-    <mat-list>
-      <mat-list-item *ngFor="let exp of candidat.experiences" class="experience-item">
-        <div class="experience-content">
-          <strong>{{ exp.poste }}</strong> &#64; {{ exp.entreprise }}
-          <div class="text-sm text-gray-500">
-            {{ exp.dateDebut | date }} - {{ exp.dateFin | date }}
-          </div>
-          <div *ngIf="exp.description" class="description">
-            {{ exp.description }}
-          </div>
-        </div>
-      </mat-list-item>
-    </mat-list>
+<mat-list>
+  <mat-list-item *ngFor="let exp of candidat.experiences" class="experience-item">
+    <div class="experience-content">
+      <strong>{{ exp.poste }}</strong> &#64; <strong>{{ exp.entreprise }}</strong>
+      
+      <div class="text-sm text-gray-500">
+        <span *ngIf="exp.dateDebut">{{ exp.dateDebut | date: 'MMM yyyy' }}</span>
+        -
+        <span *ngIf="exp.dateFin; else enCours">{{ exp.dateFin | date: 'MMM yyyy' }}</span>
+        <ng-template #enCours><em>Présent</em></ng-template>
+      </div>
+
+      <div *ngIf="exp.description" class="description mt-1">
+        {{ exp.description }}
+      </div>
+    </div>
+  </mat-list-item>
+</mat-list>
+
+
   </mat-expansion-panel>
 
   <!-- Compétences -->
@@ -97,5 +104,45 @@
       </mat-list-item>
     </mat-list>
   </mat-expansion-panel>
+
+  <!-- Métadonnées RH -->
+<mat-expansion-panel *ngIf="candidat.metadonneeRH">
+  <mat-expansion-panel-header>
+    <mat-panel-title>📊 Métadonnées RH</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <mat-list>
+    <mat-list-item>
+      <strong>Domaine de recherche :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.domaineRecherche }}</span>
+    </mat-list-item>
+
+    <mat-list-item>
+      <strong>Type de contrat :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.typeContrat }}</span>
+    </mat-list-item>
+
+    <mat-list-item>
+      <strong>Localisation :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.localisation }}</span>
+    </mat-list-item>
+
+    <mat-list-item>
+      <strong>Disponibilité :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.disponibilite }}</span>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="candidat.metadonneeRH.pretentionsSalariales">
+      <strong>Prétentions salariales :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.pretentionsSalariales | currency:'CAD':'symbol':'1.0-0' }}</span>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="candidat.metadonneeRH.source">
+      <strong>Source :</strong>
+      <span class="ml-2">{{ candidat.metadonneeRH.source }}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>
+
 
 </div>

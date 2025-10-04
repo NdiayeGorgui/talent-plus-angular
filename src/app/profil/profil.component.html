@@ -1,0 +1,72 @@
+<div *ngIf="user" class="profile-container">
+  <!-- Section de base (tous les rôles) -->
+  <mat-card>
+    <mat-card-title>Mon profil</mat-card-title>
+    <mat-card-content>
+      <p><strong>Nom :</strong> {{ user.nom }} {{ user.prenom }}</p>
+      <p><strong>Email :</strong> {{ user.email }}</p>
+      <p *ngIf="user.telephone"><strong>Tél :</strong> {{ user.telephone }}</p>
+      <p *ngIf="user.dateNaissance"><strong>Naissance :</strong> {{ user.dateNaissance | date }}</p>
+      <p *ngIf="user.adresse"><strong>Adresse :</strong> {{ user.adresse }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Section candidat -->
+  <div *ngIf="isCandidat">
+    <h3>Mon parcours</h3>
+    <!-- Wizard ou résumé des compétences / expériences etc. -->
+    <mat-expansion-panel *ngIf="user.competences">
+      <mat-expansion-panel-header>
+        <mat-panel-title>🛠️ Compétences</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let c of user.competences">
+          {{ c.libelle }} — {{ c.niveau }}
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="user.experiences">
+      <mat-expansion-panel-header>
+        <mat-panel-title>💼 Expériences</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let e of user.experiences">
+         <strong>{{ e.poste }}</strong> &#64; {{ e.entreprise }}
+          <div>{{ e.dateDebut | date }} – {{ e.dateFin | date }} </div>
+          <div *ngIf="e.description">{{ e.description }}</div>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+    <!-- CV / lettres / metadonneeRH etc -->
+    <mat-expansion-panel *ngIf="user.metadonneeRH">
+      <mat-expansion-panel-header>
+        <mat-panel-title>📊 Métadonnées RH</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item><strong>Domaine :</strong> {{ user.metadonneeRH.domaineRecherche }}</mat-list-item>
+        <mat-list-item><strong>Type contrat :</strong> {{ user.metadonneeRH.typeContrat }}</mat-list-item>
+        <!-- etc -->
+      </mat-list>
+    </mat-expansion-panel>
+  </div>
+
+  <!-- Section recruteur / employeur -->
+  <div *ngIf="isRecruteur || isEmployeur">
+    <h3>Mes offres</h3>
+    <mat-list *ngIf="user.offres">
+      <mat-list-item *ngFor="let o of user.offres">
+        {{ o.id }} — {{ o.titre }}
+      </mat-list-item>
+    </mat-list>
+    <!-- Tu peux aussi montrer des stats, nombre de candidatures reçues, etc -->
+  </div>
+
+  <!-- Section admin -->
+  <div *ngIf="isAdmin">
+    <h3>Administration</h3>
+    <p>Gérer les utilisateurs, les statistiques globales, etc.</p>
+    <!-- boutons ou liens vers pages d’admin -->
+  </div>
+</div>

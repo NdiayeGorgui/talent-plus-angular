@@ -1,0 +1,48 @@
+<form [formGroup]="metadonneeForm" style="margin-top: 32px;">
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Domaine de recherche</mat-label>
+    <input matInput formControlName="domaineRecherche" placeholder="Ex: IT, Marketing, Finance...">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Type de contrat</mat-label>
+    <mat-select formControlName="typeContrat">
+      <mat-option value="CDI">CDI</mat-option>
+      <mat-option value="CDD">CDD</mat-option>
+      <mat-option value="Stage">Stage</mat-option>
+      <mat-option value="Alternance">Alternance</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Localisation</mat-label>
+    <input matInput formControlName="localisation" placeholder="Ville, Région, Remote...">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Disponibilité</mat-label>
+    <mat-select formControlName="disponibilite">
+      <mat-option value="IMMEDIATE">Immédiate</mat-option>
+      <mat-option value="UN_MOIS">1 mois</mat-option>
+      <mat-option value="TROIS_MOIS">3 mois</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Prétentions salariales (€)</mat-label>
+    <input matInput type="number" formControlName="pretentionsSalariales">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Source</mat-label>
+    <input matInput formControlName="source" placeholder="LinkedIn, recommandation...">
+  </mat-form-field>
+
+  <div class="step-footer">
+    <button mat-raised-button (click)="goPrevious()">Précédent</button>
+    <button mat-raised-button color="primary" (click)="goNext()" [disabled]="!metadonneeForm.valid">
+      Suivant
+    </button>
+  </div>
+</form>

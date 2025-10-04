@@ -3,20 +3,24 @@
   <span class="logo">Talent+</span>
   <span class="spacer"></span>
 
-  <button mat-button routerLink="/">Accueil</button>
-  <button mat-button routerLink="/offres">Offres</button>
-  <button mat-button routerLink="/candidats">Candidats</button>
-  <button mat-button routerLink="/candidats/create">Candidatures spontanées</button>
-  <button mat-button routerLink="/recruteurs">Recruteurs</button>
-  <button mat-button routerLink="/recrutements">Suivi des candidatures</button>
-  <button mat-button routerLink="/dashboard">Tableau de bord</button>
+  <button mat-button routerLink="/"> <mat-icon>home</mat-icon>Accueil</button>
+  <button mat-button routerLink="/offres"><mat-icon>work</mat-icon>Offres</button>
+  <button mat-button routerLink="/candidats"><mat-icon>person_search</mat-icon>Candidats</button>
+  <!-- <button mat-button routerLink="/candidature-spontanee">Candidatures spontanées</button> -->
+  <button mat-button routerLink="/recruteurs"> <mat-icon>supervisor_account</mat-icon>Recruteurs</button>
+  <button mat-button routerLink="/recrutements"><mat-icon>assignment_turned_in</mat-icon>Suivi des candidatures</button>
+  <button mat-button routerLink="/dashboard"><mat-icon>dashboard</mat-icon>Tableau de bord</button>
 
   <span class="spacer"></span>
 
+  <!-- Bouton Mon Profil à droite -->
+  <button mat-button routerLink="/profil" class="profil-btn">
+    👤 Mon Profil
+  </button>
   <button mat-icon-button aria-label="Notifications">
     <mat-icon>notifications</mat-icon>
   </button>
-  <button mat-icon-button aria-label="Connexion">
+  <button mat-icon-button aria-label="Connexion" matTooltip="Connexion/Déconnexion">
     <mat-icon>login</mat-icon>
   </button>
 </mat-toolbar>

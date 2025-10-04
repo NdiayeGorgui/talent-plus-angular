@@ -14,18 +14,30 @@
     <!-- Offre -->
     <ng-container matColumnDef="offre">
       <th mat-header-cell *matHeaderCellDef> Offre </th>
-      <td mat-cell *matCellDef="let p"> {{p.offreId}} </td>
+      <td mat-cell *matCellDef="let p">
+        <ng-container *ngIf="p.offreId !== null; else showLinkButton">
+          {{ p.offreId }}
+        </ng-container>
+        <ng-template #showLinkButton>
+          <button mat-raised-button color="accent" [routerLink]="['/recrutements/lier', p.id]">
+            <mat-icon>link</mat-icon>
+            Lier à une offre
+          </button>
+        </ng-template>
+      </td>
     </ng-container>
 
-   <!-- Statut -->
-<ng-container matColumnDef="statut">
-  <th mat-header-cell *matHeaderCellDef> Statut </th>
-  <td mat-cell *matCellDef="let p">
-    <mat-chip [color]="getChipColor(p.statut)" selected>
-      {{ mapStatutLabel(p.statut) }}
-    </mat-chip>
-  </td>
-</ng-container>
+
+
+    <!-- Statut -->
+    <ng-container matColumnDef="statut">
+      <th mat-header-cell *matHeaderCellDef> Statut </th>
+      <td mat-cell *matCellDef="let p">
+        <mat-chip [color]="getChipColor(p.statut)" selected>
+          {{ mapStatutLabel(p.statut) }}
+        </mat-chip>
+      </td>
+    </ng-container>
 
 
     <!-- Date -->
@@ -38,12 +50,13 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let p">
-        <button mat-button color="primary" (click)="changerStatut(p, 'ENTRETIEN')">📞 Entretien</button> 
-        <button mat-button color="primary" (click)="changerStatut(p, 'NON_RETENU')">🚫 Non retenu</button>
-        <button mat-button color="primary" (click)="changerStatut(p, 'PROPOSITION')">🤝 Proposition</button>
-        <button mat-button color="primary" (click)="changerStatut(p, 'ACCEPTE')">✅ Accepter</button>
-        <button mat-button color="warn" (click)="changerStatut(p, 'REFUSE')">❌ Refuser</button>
-        <button mat-button color="accent" (click)="voirHistorique(p)">🕓 Historique</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'ENTRETIEN')" matTooltip="Entretien">📞</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'NON_RETENU')" matTooltip="Non retenu">🚫</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'PROPOSITION')"
+          matTooltip="Proposition">🤝</button>
+        <button mat-button color="primary" (click)="changerStatut(p, 'ACCEPTE')" matTooltip="Acceptée">✅</button>
+        <button mat-button color="warn" (click)="changerStatut(p, 'REFUSE')" matTooltip="Refusée">❌</button>
+        <button mat-button color="accent" (click)="voirHistorique(p)" matTooltip="Historique">🕓</button>
       </td>
     </ng-container>
 
