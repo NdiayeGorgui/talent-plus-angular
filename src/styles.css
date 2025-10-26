@@ -1,4 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+::ng-deep .white-snackbar {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ddd;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+::ng-deep .success-snackbar {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+::ng-deep .error-snackbar {
+  background-color: #f44336 !important;
+  color: #fff !important;
+}

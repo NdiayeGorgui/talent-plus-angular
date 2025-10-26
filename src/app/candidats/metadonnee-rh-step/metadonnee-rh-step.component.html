@@ -1,25 +1,35 @@
 <form [formGroup]="metadonneeForm" style="margin-top: 32px;">
 
+  <!-- Domaine de recherche -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Domaine de recherche</mat-label>
-    <input matInput formControlName="domaineRecherche" placeholder="Ex: IT, Marketing, Finance...">
+    <mat-select formControlName="domaineRecherche">
+      <mat-option value="IT">Informatique (IT)</mat-option>
+      <mat-option value="BANQUE">Banque</mat-option>
+      <mat-option value="FINANCE">Finance</mat-option>
+      <mat-option value="MARKETING">Marketing</mat-option>
+      <mat-option value="AUTRE">Autre</mat-option>
+    </mat-select>
   </mat-form-field>
 
+  <!-- Type de contrat -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Type de contrat</mat-label>
     <mat-select formControlName="typeContrat">
       <mat-option value="CDI">CDI</mat-option>
       <mat-option value="CDD">CDD</mat-option>
-      <mat-option value="Stage">Stage</mat-option>
-      <mat-option value="Alternance">Alternance</mat-option>
+      <mat-option value="STAGE">Stage</mat-option>
+      <mat-option value="ALTERNANCE">Alternance</mat-option>
     </mat-select>
   </mat-form-field>
 
+  <!-- Localisation -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Localisation</mat-label>
     <input matInput formControlName="localisation" placeholder="Ville, Région, Remote...">
   </mat-form-field>
 
+  <!-- Disponibilité -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Disponibilité</mat-label>
     <mat-select formControlName="disponibilite">
@@ -29,14 +39,26 @@
     </mat-select>
   </mat-form-field>
 
+  <!-- Prétentions salariales -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Prétentions salariales (€)</mat-label>
     <input matInput type="number" formControlName="pretentionsSalariales">
   </mat-form-field>
 
+  <!-- Source -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Source</mat-label>
-    <input matInput formControlName="source" placeholder="LinkedIn, recommandation...">
+    <mat-select formControlName="source">
+      <mat-option value="CANDIDATURE_DIRECT">Candidature directe</mat-option>
+      <mat-option value="RECOMMANDATION">Recommandation</mat-option>
+      <mat-option value="SITE_CARRIERE">Site carrière</mat-option>
+      <mat-option value="LINKEDIN">LinkedIn</mat-option>
+      <mat-option value="INDEED">Indeed</mat-option>
+      <mat-option value="JOBBOOM">Jobboom</mat-option>
+      <mat-option value="JOBILLICO">Jobillico</mat-option>
+      <mat-option value="EMPLOI_QUEBEC">Emploi Québec</mat-option>
+      <mat-option value="AUTRE">Autre</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <div class="step-footer">

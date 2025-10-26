@@ -35,6 +35,13 @@ import { CandidatWizardComponent } from './candidats/candidat-wizard/candidat-wi
 import { RecrutementsListComponent } from './recrutements/recrutements-list/recrutements-list.component';
 import { CandidatureSpontaneeComponent } from './candidats/candidature-spontanee/candidature-spontanee.component';
 import { ProfilComponent } from './profil/profil.component';
+import { AuthGuard } from './guards/auth.guard';
+import { MesApplicationsComponent } from './recrutements/mes-applications/mes-applications.component';
+import { EmployeurListComponent } from './employeurs/employeur-list/employeur-list.component';
+import { CreateEmployeurComponent } from './employeurs/create-employeur/create-employeur.component';
+import { EmployeurDetailsComponent } from './employeurs/employeur-details/employeur-details.component';
+import { EmployeurWizardComponent } from './employeurs/employeur-wizard/employeur-wizard.component';
+import { InfoComponent } from './info/info.component';
 
 const routes: Routes = [
   {
@@ -42,10 +49,12 @@ const routes: Routes = [
     component: LayoutComponent, // ton cadre global
     children: [
       { path: '', component: HomeComponent }, // page d'accueil
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard]},
+
+        { path: 'info/:type', component: InfoComponent},
 
       // Candidats
-      { path: 'candidats', component: CandidatsListComponent },
+      { path: 'candidats', component: CandidatsListComponent , canActivate: [AuthGuard]},
       { path: 'candidats/create', component: CreateCandidatComponent },
       { path: 'candidats/:id', component: CandidatDetailComponent },
       { path: 'candidats/postuler/:offreId', component: CandidatWizardComponent },
@@ -57,25 +66,32 @@ const routes: Routes = [
 
      
       // Recruteurs
-      { path: 'recruteurs', component: RecruteursListComponent },
+      { path: 'recruteurs', component: RecruteursListComponent , canActivate: [AuthGuard]},
       { path: 'recruteurs/create', component: CreateRecruteurComponent },
       { path: 'recruteurs/:id', component: RecruteurDetailComponent },
      
 
       // Offres
-      { path: 'offres', component: OffresListComponent },
+      { path: 'offres', component: OffresListComponent , canActivate: [AuthGuard]},
       { path: 'offres/create', component: CreateOffreComponent },
       { path: 'offres/:id', component: OffreDetailComponent },
 
+       // employeur
+      { path: 'employeurs', component: EmployeurListComponent, canActivate: [AuthGuard]},
+      { path: 'employeurs/create', component: CreateEmployeurComponent },
+      { path: 'employeurs/edit/:id', component: EmployeurDetailsComponent },
+      { path: 'employeurs/employeur-wizard', component: EmployeurWizardComponent },
+
       // Recrutements
      
-      { path: 'recrutements', component: RecrutementsListComponent },                        // liste all
+      { path: 'recrutements', component: RecrutementsListComponent , canActivate: [AuthGuard]},                        // liste all
                        
       { path: 'recrutements/candidat/:candidatId', component: RecrutementsListComponent },    // liste filtrée par candidat
       { path: 'recrutements/offre/:offreId', component: RecrutementsListComponent },  
        { path:'recrutements/lier/:processusId', component: CreateRecrutementComponent},
+        { path:'recrutements/offres/mes-applications', component: MesApplicationsComponent},
        //user
-       { path: 'profil', component: ProfilComponent },
+       { path: 'profil', component: ProfilComponent , canActivate: [AuthGuard]},
     ],
   },
 

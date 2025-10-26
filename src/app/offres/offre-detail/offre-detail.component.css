@@ -128,3 +128,17 @@ mat-form-field textarea {
   font-weight: 600;
   min-width: 120px;
 }
+
+.quill-wrapper {
+  margin-top: 1rem;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
+.description-content {
+  white-space: pre-wrap;       /* Respecte les sauts de ligne, mais replie à la ligne */
+  word-wrap: break-word;       /* Coupe les mots trop longs */
+  overflow-wrap: break-word;   /* Alternative moderne */
+  max-width: 100%;             /* Empêche le débordement horizontal */
+}

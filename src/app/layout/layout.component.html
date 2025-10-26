@@ -3,26 +3,66 @@
   <span class="logo">Talent+</span>
   <span class="spacer"></span>
 
-  <button mat-button routerLink="/"> <mat-icon>home</mat-icon>Accueil</button>
-  <button mat-button routerLink="/offres"><mat-icon>work</mat-icon>Offres</button>
-  <button mat-button routerLink="/candidats"><mat-icon>person_search</mat-icon>Candidats</button>
-  <!-- <button mat-button routerLink="/candidature-spontanee">Candidatures spontanées</button> -->
-  <button mat-button routerLink="/recruteurs"> <mat-icon>supervisor_account</mat-icon>Recruteurs</button>
-  <button mat-button routerLink="/recrutements"><mat-icon>assignment_turned_in</mat-icon>Suivi des candidatures</button>
-  <button mat-button routerLink="/dashboard"><mat-icon>dashboard</mat-icon>Tableau de bord</button>
+  <!-- Visible pour tous les rôles -->
+  <button mat-button routerLink="/">
+    <mat-icon>home</mat-icon>Accueil
+  </button>
+
+   <button  mat-button routerLink="/offres">
+    <mat-icon>work</mat-icon>Offres
+  </button>
+
+  <button *ngIf="isCandidat" mat-button routerLink="/recrutements/offres/mes-applications">
+    <mat-icon>work</mat-icon>Mes candidatures
+  </button>
+
+ 
+  <button *ngIf="isAdmin || isRecruteur" mat-button routerLink="/candidats">
+    <mat-icon>person_search</mat-icon>Candidats
+  </button>
+
+  <!-- 🔐 Visible seulement pour ADMIN -->
+  <button *ngIf="isAdmin" mat-button routerLink="/recruteurs">
+    <mat-icon>supervisor_account</mat-icon>Recruteurs
+  </button>
+
+    <button *ngIf="isAdmin " mat-button routerLink="/employeurs">
+    <mat-icon>supervisor_account</mat-icon>Employeurs
+  </button>
+
+  <!-- 🔐 Visible pour ADMIN et RECRUTEUR -->
+  <button *ngIf="isAdmin || isRecruteur" mat-button routerLink="/recrutements">
+    <mat-icon>assignment_turned_in</mat-icon>Suivi des candidatures
+  </button>
+
+  <!-- 🔐 Visible seulement pour ADMIN -->
+  <button *ngIf="isAdmin" mat-button routerLink="/dashboard">
+    <mat-icon>dashboard</mat-icon>Tableau de bord
+  </button>
+
 
   <span class="spacer"></span>
 
   <!-- Bouton Mon Profil à droite -->
   <button mat-button routerLink="/profil" class="profil-btn">
-    👤 Mon Profil
+    <mat-icon>person</mat-icon> Mon Profil
   </button>
-  <button mat-icon-button aria-label="Notifications">
-    <mat-icon>notifications</mat-icon>
+  <button *ngIf="currentUserName" class="username">
+    {{ currentUserName }}
   </button>
-  <button mat-icon-button aria-label="Connexion" matTooltip="Connexion/Déconnexion">
-    <mat-icon>login</mat-icon>
+  <!-- Bouton notifications -->
+<app-notification-bell *ngIf="isCandidat && currentUserId"></app-notification-bell>
+
+
+
+
+  <button mat-icon-button [matTooltip]="isLoggedIn() ? 'Déconnexion' : 'Connexion'"
+    (click)="isLoggedIn() ? logout() : openLoginPopup()">
+    <mat-icon>{{ isLoggedIn() ? 'logout' : 'login' }}</mat-icon>
   </button>
+
+
+
 </mat-toolbar>
 
 <!-- Layout principal -->

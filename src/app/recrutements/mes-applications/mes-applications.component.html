@@ -1,0 +1,42 @@
+<h2>📄 Mes candidatures</h2>
+
+<table mat-table [dataSource]="processusList" class="mat-elevation-z2" *ngIf="processusList.length > 0">
+  <!-- ID Offre -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID Offre </th>
+    <td mat-cell *matCellDef="let p"> {{ p.offreId || '—' }} </td>
+  </ng-container>
+
+  <!-- Titre -->
+  <ng-container matColumnDef="titre">
+    <th mat-header-cell *matHeaderCellDef> Titre </th>
+    <td mat-cell *matCellDef="let p"> {{ p.titreOffre || 'Non spécifié' }} </td>
+  </ng-container>
+
+  <!-- Catégorie -->
+  <ng-container matColumnDef="categorie">
+    <th mat-header-cell *matHeaderCellDef> Catégorie </th>
+    <td mat-cell *matCellDef="let p"> {{ p.categorieOffre || '—' }} </td>
+  </ng-container>
+
+  <!-- Statut -->
+  <ng-container matColumnDef="statut">
+    <th mat-header-cell *matHeaderCellDef> Statut </th>
+    <td mat-cell *matCellDef="let p"> {{ p.statut }} </td>
+  </ng-container>
+
+  <!-- Actions -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let p">
+      <button mat-button color="primary" (click)="ouvrirOffre(p.offreId)">🔍 Voir l'offre</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['id', 'titre', 'categorie', 'statut', 'action']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['id', 'titre', 'categorie', 'statut', 'action'];"></tr>
+</table>
+
+<div *ngIf="processusList.length === 0">
+  <p>Vous n'avez postulé à aucune offre pour l'instant.</p>
+</div>

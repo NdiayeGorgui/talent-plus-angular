@@ -1,9 +1,13 @@
 <div class="p-4">
   <h2>📋 Processus des recrutements</h2>
+  <mat-form-field appearance="outline" style="width: 100%; max-width: 400px; margin: 1rem 0;">
+    <mat-label>🔍 Rechercher par n° d'offre ou de candidat</mat-label>
+    <input matInput  type="search" [(ngModel)]="searchTerm" (input)="applySearchFilter()" placeholder="Ex: 12 ou 101" />
+  </mat-form-field>
 
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
-  <table mat-table [dataSource]="processusList" class="mat-elevation-z8 w-full">
+  <table mat-table [dataSource]="filteredProcessusList" class="mat-elevation-z8 w-full">
 
     <!-- Candidat -->
     <ng-container matColumnDef="candidat">

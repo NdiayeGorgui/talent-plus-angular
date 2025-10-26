@@ -1,0 +1,118 @@
+<div class="container">
+  <h2>🏢 Liste des employeurs</h2>
+
+  <!-- Barre d'actions -->
+  <div class="action-bar">
+   <!--  <button mat-raised-button color="primary" routerLink="/employeurs/create">
+      ➕ Ajouter un employeur
+    </button> -->
+
+    <!-- 🔍 Barre de recherche -->
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-label>🔍 Rechercher un employeur</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchKeyword"
+        (ngModelChange)="applyFilter()"
+        placeholder="Nom, email, ville..."
+      />
+      <button
+        *ngIf="searchKeyword"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearSearch()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Chargement -->
+  <div *ngIf="isLoading" class="loading">Chargement des employeurs...</div>
+
+  <!-- Tableau des employeurs -->
+  <table
+    mat-table
+    [dataSource]="filteredEmployeurs"
+    class="mat-elevation-z8"
+    *ngIf="!isLoading && employeurs.length > 0"
+  >
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let e">{{ e.id }}</td>
+    </ng-container>
+
+    <!-- Nom -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let e">{{ e.nom }}</td>
+    </ng-container>
+
+    <!-- Type d'entreprise -->
+    <ng-container matColumnDef="typeEntreprise">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let e">{{ e.typeEntreprise }}</td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="emailContact">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let e">{{ e.emailContact }}</td>
+    </ng-container>
+
+    <!-- Téléphone -->
+    <ng-container matColumnDef="telephone">
+      <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+      <td mat-cell *matCellDef="let e">{{ e.telephone }}</td>
+    </ng-container>
+
+    <!-- Ville -->
+    <ng-container matColumnDef="ville">
+      <th mat-header-cell *matHeaderCellDef>Ville</th>
+      <td mat-cell *matCellDef="let e">{{ e.ville }}</td>
+    </ng-container>
+
+    <!-- Pays -->
+    <ng-container matColumnDef="pays">
+      <th mat-header-cell *matHeaderCellDef>Pays</th>
+      <td mat-cell *matCellDef="let e">{{ e.pays }}</td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let e">
+        <button
+          mat-icon-button
+          color="accent"
+          (click)="editEmployeur(e.id!)"
+          matTooltip="Modifier"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteEmployeur(e.id!)"
+          matTooltip="Supprimer"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- En-têtes et lignes -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="table-row"
+    ></tr>
+  </table>
+
+  <p *ngIf="!isLoading && employeurs.length === 0">
+    Aucun employeur trouvé.
+  </p>
+</div>

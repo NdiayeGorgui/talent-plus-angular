@@ -1,72 +1,465 @@
 <div *ngIf="user" class="profile-container">
-  <!-- Section de base (tous les rôles) -->
+  <!-- Section commune à tous les rôles -->
   <mat-card>
     <mat-card-title>Mon profil</mat-card-title>
-    <mat-card-content>
-      <p><strong>Nom :</strong> {{ user.nom }} {{ user.prenom }}</p>
-      <p><strong>Email :</strong> {{ user.email }}</p>
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="primary" (click)="toggleEdit()">
+        {{ editMode ? '❌ Annuler' : '✏️ Modifier le profil' }}
+      </button>
+    </mat-card-actions>
+
+    <!-- Affichage du profil (lecture seule) -->
+    <mat-card-content *ngIf="!editMode">
+
+      <p *ngIf="user.nom"><strong>Nom :</strong> {{ user.nom }}</p>
+      <p *ngIf="user.prenom"><strong>Prénom :</strong> {{ user.prenom }}</p>
       <p *ngIf="user.telephone"><strong>Tél :</strong> {{ user.telephone }}</p>
+      <p *ngIf="user.emailContact"><strong>Email :</strong> {{ user.emailContact }}</p>
+      <p *ngIf="user.email"><strong>Email :</strong> {{ user.email }}</p>
+      <p *ngIf="user.poste"><strong>Poste:</strong> {{ user.poste }}</p>
       <p *ngIf="user.dateNaissance"><strong>Naissance :</strong> {{ user.dateNaissance | date }}</p>
       <p *ngIf="user.adresse"><strong>Adresse :</strong> {{ user.adresse }}</p>
+      <p *ngIf="user.niveauEtude"><strong>Niveau d'étude :</strong> {{ user.niveauEtude }}</p>
+      <p *ngIf="user.niveau && !isCandidat"><strong>Niveau :</strong> {{ user.niveau }}</p>
     </mat-card-content>
+
+
+    <!-- Formulaire de modification dynamique -->
+    <form *ngIf="editMode" [formGroup]="editForm" (ngSubmit)="submitProfileUpdate()">
+      <mat-form-field appearance="fill">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="prenom" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput [disabled]="true" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('telephone')">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="telephone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('poste')">
+        <mat-label>Poste</mat-label>
+        <input matInput formControlName="poste" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('dateNaissance')">
+        <mat-label>Date de naissance</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateNaissance" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('adresse')">
+        <mat-label>Adresse</mat-label>
+        <input matInput formControlName="adresse" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('niveauEtude')">
+        <mat-label>Niveau d'étude</mat-label>
+        <input matInput formControlName="niveauEtude" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="editForm.get('niveau') && !isCandidat">
+        <mat-label>Niveau</mat-label>
+        <input matInput formControlName="niveau" />
+      </mat-form-field>
+
+
+      <div class="mt-3">
+        <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button mat-button type="button" (click)="cancelEdit()">❌ Annuler</button>
+      </div>
+    </form>
   </mat-card>
 
-  <!-- Section candidat -->
+  <!-- Section spécifique au CANDIDAT -->
   <div *ngIf="isCandidat">
     <h3>Mon parcours</h3>
-    <!-- Wizard ou résumé des compétences / expériences etc. -->
-    <mat-expansion-panel *ngIf="user.competences">
+
+    <!-- CVs -->
+    <mat-expansion-panel *ngIf="user.cvs?.length">
       <mat-expansion-panel-header>
-        <mat-panel-title>🛠️ Compétences</mat-panel-title>
+        <mat-panel-title>📄 CV</mat-panel-title>
       </mat-expansion-panel-header>
+
       <mat-list>
-        <mat-list-item *ngFor="let c of user.competences">
-          {{ c.libelle }} — {{ c.niveau }}
+        <mat-list-item *ngFor="let cv of user.cvs">
+          <!-- Lien vers le CV -->
+          <a [href]="cv.fichierUrl" target="_blank" rel="noopener">
+            {{ cv.titre }} - Déposé le {{ cv.dateDepot | date:'shortDate' }}
+          </a>
+
+          <!-- Bouton remplacer -->
+          <button mat-icon-button (click)="onReplaceCvClick(cv.id!)" style="margin-left:auto">
+            <mat-icon>upload</mat-icon>
+          </button>
+
+          <!-- Champ fichier (visible seulement si cliqué) -->
+          <input *ngIf="replaceCvId === cv.id" type="file" (change)="onCvFileSelected($event, cv.id!)"
+            style="margin-top: 0.5rem;" />
         </mat-list-item>
       </mat-list>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf="user.experiences">
+
+
+    <!-- Lettres de motivation -->
+    <mat-expansion-panel *ngIf="user.lettres?.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>✉️ Lettres de motivation</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let lettre of user.lettres">
+          <a [href]="lettre.fichierUrl" target="_blank" rel="noopener">
+            {{ lettre.titre }} - Déposée le {{ lettre.dateDepot | date:'shortDate' }}
+          </a>
+
+          <!-- 👇 Bouton remplacer -->
+          <button mat-icon-button (click)="onReplaceLettreClick(lettre.id!)" style="margin-left:auto">
+            <mat-icon>upload</mat-icon>
+          </button>
+
+          <!-- 👇 Input file -->
+          <input *ngIf="replaceLettreId === lettre.id" type="file"
+            (change)="onLettreFileSelected($event, lettre.id!)" />
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+    <!-- 🛠️ Compétences Techniques -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>🛠️ Compétences Techniques</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!-- Liste des compétences existantes -->
+      <mat-list *ngIf="user?.competences?.length">
+        <mat-list-item *ngFor="let c of user.competences">
+          <strong>{{ c.libelle }}</strong> — {{ c.niveau }}
+        </mat-list-item>
+      </mat-list>
+
+      <p *ngIf="!user?.competences?.length" class="text-muted">
+        Aucune compétence enregistrée pour le moment.
+      </p>
+
+      <hr />
+
+      <!-- ➕ Formulaire d’ajout -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>➕ Ajouter une compétence technique</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="addCompetenceForm" (ngSubmit)="addCompetence()">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Libellé</mat-label>
+            <input matInput formControlName="libelle" placeholder="Ex : Java, Angular, SQL..." />
+            <mat-error *ngIf="addCompetenceForm.get('libelle')?.hasError('required')">
+              Le libellé est obligatoire.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Niveau</mat-label>
+            <mat-select formControlName="niveau">
+              <mat-option *ngFor="let n of niveaux" [value]="n">{{ n }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="text-align: right; margin-top: 1rem;">
+            <button mat-raised-button color="primary" type="submit" [disabled]="addCompetenceForm.invalid || loading">
+              ➕ Ajouter
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-expansion-panel>
+
+
+    <!-- 🗣️ Compétences linguistiques -->
+    <mat-expansion-panel *ngIf="user.competenceLinguistiques?.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>🗣️ Compétences linguistiques</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!-- Bouton d'édition -->
+      <div style="text-align: right; margin-bottom: 1rem;">
+        <button mat-stroked-button color="primary" (click)="editLinguistique = !editLinguistique">
+          {{ editLinguistique ? '❌ Annuler' : '✏️ Modifier' }}
+        </button>
+      </div>
+
+      <!-- Formulaire d'édition -->
+      <form *ngIf="editLinguistique">
+        <div class="langue-container" *ngFor="let cl of user.competenceLinguistiques">
+          <label class="langue-label">{{ cl.langue || 'Langue non spécifiée' }}</label>
+          <mat-form-field appearance="fill" class="niveau-field">
+            <mat-label>Niveau</mat-label>
+            <mat-select [(value)]="cl.niveau">
+              <mat-option value="DEBUTANT">Débutant</mat-option>
+              <mat-option value="INTERMEDIAIRE">Intermédiaire</mat-option>
+              <mat-option value="EXPERT">Expert</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div style="margin-top: 1rem; text-align: right;">
+          <button mat-raised-button color="primary" type="button" (click)="saveLangueUpdates()">
+            💾 Enregistrer
+          </button>
+          <button mat-button type="button" (click)="cancelLangueEdit()">❌ Annuler</button>
+        </div>
+      </form>
+
+      <!-- Lecture seule -->
+      <mat-list *ngIf="!editLinguistique">
+        <mat-list-item *ngFor="let cl of user.competenceLinguistiques">
+          <strong>{{ cl.langue || 'Langue non spécifiée' }}</strong> — {{ cl.niveau }}
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+
+
+    <!-- Expériences -->
+    <mat-expansion-panel *ngIf="user.experiences?.length">
       <mat-expansion-panel-header>
         <mat-panel-title>💼 Expériences</mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let e of user.experiences">
-         <strong>{{ e.poste }}</strong> &#64; {{ e.entreprise }}
-          <div>{{ e.dateDebut | date }} – {{ e.dateFin | date }} </div>
-          <div *ngIf="e.description">{{ e.description }}</div>
+        <mat-list-item *ngFor="let exp of user.experiences" class="experience-item">
+          <div class="experience-content">
+            <strong>{{ exp.poste }}</strong> &#64; <strong>{{ exp.entreprise }}</strong>
+            <div class="text-sm text-gray-500">
+              <span *ngIf="exp.dateDebut">{{ exp.dateDebut | date: 'MMM yyyy' }}</span>
+              -
+              <span *ngIf="exp.dateFin; else enCours">{{ exp.dateFin | date: 'MMM yyyy' }}</span>
+              <ng-template #enCours><em>Présent</em></ng-template>
+            </div>
+            <div *ngIf="exp.description" class="description mt-1" style="margin-top: 4px; color: #555;">
+              {{ exp.description }}
+            </div>
+          </div>
         </mat-list-item>
       </mat-list>
+      <!-- ➕ Ajouter une expérience -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>➕ Ajouter une expérience</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="addExperienceForm" (ngSubmit)="addExperience()">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Poste</mat-label>
+            <input matInput formControlName="poste" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Entreprise</mat-label>
+            <input matInput formControlName="entreprise" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Date de début</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="dateDebut" />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Date de fin</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="dateFin" />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <div style="text-align: right; margin-top: 1rem;">
+            <button mat-raised-button color="primary" type="submit" [disabled]="addExperienceForm.invalid || loading">
+              ➕ Ajouter
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+
     </mat-expansion-panel>
 
-    <!-- CV / lettres / metadonneeRH etc -->
+    <!-- Métadonnées RH -->
     <mat-expansion-panel *ngIf="user.metadonneeRH">
       <mat-expansion-panel-header>
         <mat-panel-title>📊 Métadonnées RH</mat-panel-title>
       </mat-expansion-panel-header>
-      <mat-list>
-        <mat-list-item><strong>Domaine :</strong> {{ user.metadonneeRH.domaineRecherche }}</mat-list-item>
-        <mat-list-item><strong>Type contrat :</strong> {{ user.metadonneeRH.typeContrat }}</mat-list-item>
-        <!-- etc -->
-      </mat-list>
+      <div style="text-align: right; margin-top: 8px;  margin-bottom: 8px;">
+        <button mat-stroked-button color="primary" (click)="toggleEditMetadonneeRh()">
+          ✏️ Modifier
+        </button>
+      </div>
+      <div *ngIf="!editMetadonneeRh">
+        <mat-list>
+          <mat-list-item><strong>Domaine :</strong> {{ user.metadonneeRH.domaineRecherche }}</mat-list-item>
+          <mat-list-item><strong>Type contrat :</strong> {{ user.metadonneeRH.typeContrat }}</mat-list-item>
+          <mat-list-item><strong>Localisation :</strong> {{ user.metadonneeRH.localisation }}</mat-list-item>
+          <mat-list-item><strong>Disponibilité :</strong> {{ user.metadonneeRH.disponibilite }}</mat-list-item>
+          <mat-list-item><strong>Prétentions Salariales :</strong> {{ user.metadonneeRH.pretentionsSalariales
+            }}</mat-list-item>
+          <mat-list-item><strong>Source :</strong> {{ user.metadonneeRH.source }}</mat-list-item>
+        </mat-list>
+
+
+      </div>
+
+      <!-- 📝 Formulaire édition -->
+      <form *ngIf="editMetadonneeRh" [formGroup]="editMetadonneeRhForm" (ngSubmit)="onSubmitMetadonneeRh()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Domaine de recherche</mat-label>
+          <mat-select formControlName="domaineRecherche">
+            <mat-option value="IT">Informatique (IT)</mat-option>
+            <mat-option value="BANQUE">Banque</mat-option>
+            <mat-option value="FINANCE">Finance</mat-option>
+            <mat-option value="MARKETING">Marketing</mat-option>
+            <mat-option value="AUTRE">Autre</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Type de contrat</mat-label>
+          <mat-select formControlName="typeContrat">
+            <mat-option value="CDI">CDI</mat-option>
+            <mat-option value="CDD">CDD</mat-option>
+            <mat-option value="ALTERNANCE">Alternance</mat-option>
+            <mat-option value="STAGE">Stage</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Localisation</mat-label>
+          <input matInput formControlName="localisation" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Disponibilité</mat-label>
+          <mat-select formControlName="disponibilite">
+            <mat-option value="IMMEDIATE">Immédiate</mat-option>
+            <mat-option value="UN_MOIS">1 mois</mat-option>
+            <mat-option value="TROIS_MOIS">3 mois</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Prétentions salariales</mat-label>
+          <input matInput type="number" formControlName="pretentionsSalariales" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Source</mat-label>
+          <mat-select formControlName="source">
+            <mat-option value="CANDIDATURE_DIRECT">Candidature directe</mat-option>
+            <mat-option value="RECOMMANDATION">Recommandation</mat-option>
+            <mat-option value="SITE_CARRIERE">Site carrière</mat-option>
+            <mat-option value="LINKEDIN">LinkedIn</mat-option>
+            <mat-option value="INDEED">Indeed</mat-option>
+            <mat-option value="JOBBOOM">Jobboom</mat-option>
+            <mat-option value="JOBILLICO">Jobillico</mat-option>
+            <mat-option value="EMPLOI_QUEBEC">Emploi Québec</mat-option>
+            <mat-option value="AUTRE">Autre</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div style="text-align: right; margin-top: 8px;">
+          <button mat-raised-button color="primary" type="submit" [disabled]="editMetadonneeRhForm.invalid">
+            💾 Enregistrer
+          </button>
+          <button mat-button type="button" (click)="toggleEditMetadonneeRh()">❌ Annuler</button>
+        </div>
+      </form>
     </mat-expansion-panel>
   </div>
 
-  <!-- Section recruteur / employeur -->
-  <div *ngIf="isRecruteur || isEmployeur">
-    <h3>Mes offres</h3>
-    <mat-list *ngIf="user.offres">
-      <mat-list-item *ngFor="let o of user.offres">
-        {{ o.id }} — {{ o.titre }}
-      </mat-list-item>
-    </mat-list>
-    <!-- Tu peux aussi montrer des stats, nombre de candidatures reçues, etc -->
+  <!-- Section Recruteur / Employeur -->
+<div *ngIf="isRecruteur || isEmployeur">
+
+    <h3>📢 Mes offres publiées</h3>
+
+    <mat-accordion *ngIf="user?.offres?.length">
+      <mat-expansion-panel *ngFor="let o of user.offres">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ o.titre }}</mat-panel-title>
+          <mat-panel-description>{{ o.active ? '✅ Active' : '❌ Inactive' }}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item><strong>ID :</strong> {{ o.id || 'Non précisée' }}</mat-list-item>
+          <mat-list-item><strong>Catégorie :</strong> {{ o.categorie || 'Non précisée' }}</mat-list-item>
+          <mat-list-item><strong>Ville :</strong> {{ o.ville || 'Non précisée' }}</mat-list-item>
+          <mat-list-item><strong>Pays :</strong> {{ o.pays || 'Non précisé' }}</mat-list-item>
+          <mat-list-item><strong>Date de publication :</strong> {{ o.datePublication | date:'longDate'
+            }}</mat-list-item>
+          <mat-list-item>
+            <strong>Fin d'affichage :</strong>
+            {{ o.dateFinAffichage ? (o.dateFinAffichage | date:'longDate') : 'Non précisée' }}
+          </mat-list-item>
+          <mat-list-item><strong>Statut :</strong> {{ o.active ? 'Active' : 'Inactive' }}</mat-list-item>
+        </mat-list>
+        <div class="offre-description mt-2" *ngIf="o.description">
+          <strong>Description :</strong>
+          <div [innerHTML]="o.description"></div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <p *ngIf="!user?.offres?.length">Aucune offre publiée pour le moment.</p>
   </div>
 
-  <!-- Section admin -->
+  <!-- Section ADMIN -->
   <div *ngIf="isAdmin">
-    <h3>Administration</h3>
-    <p>Gérer les utilisateurs, les statistiques globales, etc.</p>
-    <!-- boutons ou liens vers pages d’admin -->
+    <mat-card class="mat-elevation-z2" style="text-align: left;">
+      <h3>Administration</h3>
+      <p>Gérer les utilisateurs, les statistiques globales, etc.</p>
+    </mat-card>
+
+
+    <!-- Formulaire de création de recruteur -->
+    <mat-card class="mt-4">
+      <mat-card-title>Créer un compte Recruteur</mat-card-title>
+      <mat-card-content [formGroup]="recruteurForm">
+        <mat-form-field appearance="fill">
+          <mat-label>Nom d'utilisateur</mat-label>
+          <input matInput formControlName="username" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" formControlName="password" required />
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="creerRecruteur()"
+          [disabled]="recruteurForm.invalid || loading">
+           <mat-icon style="color: white;">add</mat-icon>Créer le recruteur
+        </button>
+
+        <mat-progress-bar *ngIf="loading" mode="indeterminate" class="mt-2"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

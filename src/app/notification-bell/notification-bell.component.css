@@ -1,0 +1,77 @@
+.notification-bell {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-bell button {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-bell .badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #e53935;
+  color: white;
+  font-size: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .notif-menu.mat-menu-panel {
+  width: 320px !important;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.notif-header {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #ddd;
+  color: #444;
+}
+
+.notif-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.notif-item.unread {
+  font-weight: 500;
+  background-color: #f9f9f9;
+}
+
+.notif-item:hover {
+  background-color: #f1f1f1;
+}
+
+.notif-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #333;
+}
+
+.notif-item small {
+  display: block;
+  color: #888;
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+.empty {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}

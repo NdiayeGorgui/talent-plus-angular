@@ -1,0 +1,47 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 300px;
+}
+
+mat-dialog-content {
+  padding-top: 10px;
+  padding-bottom: 0; /* évite que le contenu descende trop */
+}
+
+mat-dialog-actions {
+  margin-top: 15px;
+}
+
+.toggle-link {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 15px; /* ✅ ajoute de l'espace en bas */
+  font-size: 14px;
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+.toggle-link a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #3f51b5;
+  transition: color 0.2s;
+}
+
+.toggle-link a:hover {
+  color: #1a237e;
+}
+
+
+.toggle-link a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #3f51b5;
+  transition: color 0.2s;
+}
+
+.toggle-link a:hover {
+  color: #1a237e;
+}

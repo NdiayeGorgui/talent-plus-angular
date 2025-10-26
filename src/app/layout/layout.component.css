@@ -106,4 +106,12 @@
   margin-top: 12px;
 }
 
+.username {
+  margin: 0 10px;
+  font-weight: 500;
+  color: black;
+  font-size: 14px; /* 🔧 Ajuste ici pour harmoniser */
+  display: flex;
+  align-items: center;
+}
 

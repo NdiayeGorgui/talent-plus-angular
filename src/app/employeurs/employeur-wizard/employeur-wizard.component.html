@@ -1,0 +1,147 @@
+<div class="wizard-root">
+  <h1>🧑‍💼 Création d’un employeur & publication d’une offre</h1>
+
+  <!-- Barre de progression -->
+  <mat-progress-bar mode="determinate" [value]="(stepper.selectedIndex + 1) * 50"></mat-progress-bar>
+
+  <div class="stepper-container">
+    <mat-horizontal-stepper linear #stepper>
+
+      <!-- Étape 1 : Informations employeur -->
+      <mat-step [stepControl]="employeurForm">
+        <form [formGroup]="employeurForm">
+          <ng-template matStepLabel>Informations de l'employeur</ng-template>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom de l'entreprise</mat-label>
+            <input matInput formControlName="nom" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Type d'entreprise</mat-label>
+            <mat-select formControlName="typeEntreprise">
+              <mat-option value="PME">PME</mat-option>
+              <mat-option value="STARTUP">Startup</mat-option>
+              <mat-option value="MULTINATIONALE">Multinationale</mat-option>
+              <mat-option value="AUTRE">Autre</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email de contact</mat-label>
+            <input matInput type="email" formControlName="emailContact" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Poste occupé</mat-label>
+            <input matInput formControlName="poste" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" />
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Ville</mat-label>
+              <input matInput formControlName="ville" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Pays</mat-label>
+              <input matInput formControlName="pays" />
+            </mat-form-field>
+          </div>
+
+          <div class="step-footer">
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!employeurForm.valid">
+              Suivant
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Étape 2 : Création de l’offre -->
+      <mat-step [stepControl]="offreForm">
+        <form [formGroup]="offreForm">
+          <ng-template matStepLabel>Informations de l’offre</ng-template>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Titre de l'offre</mat-label>
+            <input matInput formControlName="titre" />
+          </mat-form-field>
+
+          <!-- ✅ Éditeur Quill -->
+          <div class="quill-container">
+            <label class="quill-label">Description</label>
+            <quill-editor
+              formControlName="description"
+              [modules]="quillModules"
+              theme="snow"
+              class="quill-editor">
+            </quill-editor>
+          </div>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Catégorie</mat-label>
+              <mat-select formControlName="categorie">
+                <mat-option value="IT">Informatique</mat-option>
+                <mat-option value="FINANCE">Finance</mat-option>
+                <mat-option value="MARKETING">Marketing</mat-option>
+                <mat-option value="AUTRE">Autre</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Ville</mat-label>
+              <input matInput formControlName="ville" />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Pays</mat-label>
+            <input matInput formControlName="pays" />
+          </mat-form-field>
+
+          <!-- ✅ Date de fin d’affichage avec Datepicker -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de fin d'affichage</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="dateFinAffichage"
+              placeholder="Choisissez une date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <mat-error *ngIf="offreForm.get('dateFinAffichage')?.hasError('required')">
+              La date de fin d'affichage est obligatoire
+            </mat-error>
+            <mat-error *ngIf="offreForm.get('dateFinAffichage')?.hasError('minDate')">
+              La date doit être ultérieure à aujourd’hui
+            </mat-error>
+          </mat-form-field>
+
+          <div class="step-footer">
+            <button mat-raised-button matStepperPrevious>Précédent</button>
+            <button
+              mat-raised-button
+              color="accent"
+              (click)="soumettre()"
+              [disabled]="!offreForm.valid">
+              ✅ Créer l’employeur & publier l’offre
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+    </mat-horizontal-stepper>
+  </div>
+</div>

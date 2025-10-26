@@ -1,0 +1,32 @@
+<div class="info-wrapper">
+  <div class="info-card">
+    
+    <!-- Icône optionnelle -->
+    <div class="info-icon">
+      <img *ngIf="type === 'candidat'" src="assets/images/candidat.png" alt="Candidat" />
+      <img *ngIf="type === 'recruteur'" src="assets/images/recruteur.png" alt="Recruteur" />
+      <img *ngIf="type === 'employeur'" src="assets/images/employeur.png" alt="Employeur" />
+    </div>
+
+    <!-- Titre -->
+    <h1 class="info-title">{{ title }}</h1>
+
+    <!-- Description -->
+    <p class="info-description">{{ description }}</p>
+
+    <!-- Liste -->
+    <ul *ngIf="bulletPoints.length > 0" class="info-list">
+      <li *ngFor="let point of bulletPoints">
+        <span class="bullet-icon">✔️</span>
+        <span>{{ point }}</span>
+      </li>
+    </ul>
+
+    <!-- Message d'erreur si type invalide -->
+    <div *ngIf="bulletPoints.length === 0" class="error">
+      ❗ La page demandée est invalide ou le type d'utilisateur est inconnu.
+      <div><a routerLink="/" class="back-link">← Retour à l'accueil</a></div>
+    </div>
+
+  </div>
+</div>

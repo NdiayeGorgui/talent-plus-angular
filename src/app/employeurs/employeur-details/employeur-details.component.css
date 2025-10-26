@@ -1,0 +1,39 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+mat-card {
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.details p {
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+.edit-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.loading, .empty {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}

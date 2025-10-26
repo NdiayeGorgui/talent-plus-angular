@@ -8,19 +8,15 @@
         <ng-container *ngIf="isEditing">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Titre de l'offre</mat-label>
-            <textarea matInput [(ngModel)]="offre.titre" rows="2" cdkTextareaAutosize
-                      #autosize="cdkTextareaAutosize"
-                      cdkAutosizeMinRows="2"
-                      cdkAutosizeMaxRows="5"></textarea>
+            <textarea matInput [(ngModel)]="offre.titre" rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </ng-container>
       </mat-card-title>
 
       <!-- POSTULER visible uniquement quand NOT editing ET offre active -->
-      <button *ngIf="offre?.active && !isEditing"
-              mat-raised-button color="primary"
-              class="postuler-button"
-              (click)="goToWizard()">
+      <button *ngIf="offre?.active && !isEditing" mat-raised-button color="primary" class="postuler-button"
+        (click)="goToWizardOrPostuler()">
         📩 Postuler
       </button>
     </div>
@@ -28,17 +24,22 @@
     <mat-card-subtitle>
       Publiée le {{ offre.datePublication | date:'longDate' }}
     </mat-card-subtitle>
+    <mat-card-subtitle>
+      Date fin affichage le {{ offre.dateFinAffichage | date:'longDate' }}
+    </mat-card-subtitle>
 
     <mat-card-content>
 
       <!-- VILLE, PAYS, CATEGORIE sur la même ligne -->
-      <div *ngIf="!isEditing" style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+      <div *ngIf="!isEditing"
+        style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
         <p><strong>Ville :</strong> {{ offre.ville }}</p>
         <p><strong>Pays :</strong> {{ offre.pays }}</p>
         <p><strong>Catégorie :</strong> {{ offre.categorie }}</p>
       </div>
 
-      <div *ngIf="isEditing" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+      <div *ngIf="isEditing"
+        style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
         <mat-form-field appearance="outline" style="flex: 1; min-width: 150px;">
           <mat-label>Ville</mat-label>
           <input matInput [(ngModel)]="offre.ville" />
@@ -55,19 +56,22 @@
         </mat-form-field>
       </div>
 
-     <!-- DESCRIPTION -->
-<p><strong>Description du poste:</strong></p>
+      <!-- DESCRIPTION -->
+      <p><strong>Description du poste:</strong></p>
 
-<ng-container *ngIf="!isEditing">
-  <div [innerHTML]="offre.description"></div>
-</ng-container>
+      <ng-container *ngIf="!isEditing">
+        <div [innerHTML]="offre.description" class="description-content"></div>
 
-<ng-container *ngIf="isEditing">
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Description</mat-label>
-    <textarea matInput rows="8" [(ngModel)]="offre.description"></textarea>
-  </mat-form-field>
-</ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="isEditing">
+        <div class="quill-wrapper">
+          <quill-editor [(ngModel)]="offre.description" [styles]="{height: '300px'}"
+            [placeholder]="'Décrivez le poste ici...'" [modules]="quillModules">
+          </quill-editor>
+        </div>
+
+      </ng-container>
 
       <!-- RECRUTEUR -->
       <p><strong>Recruteur :</strong></p>
@@ -87,13 +91,14 @@
       <ng-container *ngIf="isEditing && recruteurs.length && offre">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Recruteur</mat-label>
-          <mat-select [(ngModel)]="offre.recruteurId" name="recruteurId">
+          <mat-select [(ngModel)]="offre.recruteurId" name="recruteurId" [disabled]="isEmployeurOwner">
             <mat-option *ngFor="let r of recruteurs" [value]="r.id">
               {{ r.prenom }} {{ r.nom }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </ng-container>
+
 
       <!-- STATUT -->
       <p><strong>Statut : </strong>
@@ -109,7 +114,9 @@
     <button mat-stroked-button color="primary" (click)="goBack()">🔙 Retour</button>
 
     <!-- Actions lecture seule -->
-    <ng-container *ngIf="!isEditing">
+    <!-- Actions lecture seule -->
+    <!-- ✅ Cas Admin ou Recruteur propriétaire -->
+    <ng-container *ngIf="!isEditing && (isAdmin || isRecruteurOwner)">
       <button mat-raised-button color="accent" (click)="goToEdit()">✏️ Modifier</button>
 
       <button *ngIf="offre?.active" mat-stroked-button color="warn" (click)="closeOffre()">
@@ -124,6 +131,14 @@
         Voir processus liés
       </button>
     </ng-container>
+
+    <!-- ✅ Cas Employeur propriétaire -->
+    <ng-container *ngIf="!isEditing && isEmployeurOwner">
+      <button mat-raised-button color="accent" (click)="goToEdit()">✏️ Modifier</button>
+    </ng-container>
+
+
+
 
     <!-- Actions édition -->
     <ng-container *ngIf="isEditing">

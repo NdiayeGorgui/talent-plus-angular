@@ -8,68 +8,48 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Titre de l'offre</mat-label>
           <input matInput formControlName="titre" placeholder="Ex: Développeur Angular">
-          <mat-error *ngIf="offreForm.get('titre')?.hasError('required')">
-            Le titre est obligatoire
-          </mat-error>
-          <mat-error *ngIf="offreForm.get('titre')?.hasError('minlength')">
-            Minimum 3 caractères
-          </mat-error>
+          <mat-error *ngIf="offreForm.get('titre')?.hasError('required')">Le titre est obligatoire</mat-error>
+          <mat-error *ngIf="offreForm.get('titre')?.hasError('minlength')">Minimum 3 caractères</mat-error>
         </mat-form-field>
 
         <!-- Description -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Description</mat-label>
-          <textarea matInput rows="5" formControlName="description"
-                    placeholder="Décrivez le poste, les missions, etc."></textarea>
-          <mat-error *ngIf="offreForm.get('description')?.hasError('required')">
-            La description est obligatoire
-          </mat-error>
-          <mat-error *ngIf="offreForm.get('description')?.hasError('minlength')">
-            Minimum 10 caractères
-          </mat-error>
-        </mat-form-field>
+        <div class="full-width quill-field">
+          <label class="mat-label">Description</label>
+          <quill-editor formControlName="description" [styles]="{ height: '250px' }"
+            [modules]="quillModules"></quill-editor>
+        </div>
 
-         <!-- Categorie -->
+        <!-- Catégorie -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Categorie</mat-label>
+          <mat-label>Catégorie</mat-label>
           <input matInput formControlName="categorie" placeholder="Ex: Développement/ingénierie">
-          <mat-error *ngIf="offreForm.get('categorie')?.hasError('required')">
-            La categorie est obligatoire
-          </mat-error>
-          <mat-error *ngIf="offreForm.get('categorie')?.hasError('minlength')">
-            Minimum 2 caractères
-          </mat-error>
+          <mat-error *ngIf="offreForm.get('categorie')?.hasError('required')">La catégorie est obligatoire</mat-error>
+          <mat-error *ngIf="offreForm.get('categorie')?.hasError('minlength')">Minimum 2 caractères</mat-error>
         </mat-form-field>
 
-         <!-- Ville -->
+        <!-- Ville -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Ville</mat-label>
           <input matInput formControlName="ville" placeholder="Ex: Montréal">
-          <mat-error *ngIf="offreForm.get('ville')?.hasError('required')">
-            La ville est obligatoire
-          </mat-error>
-          <mat-error *ngIf="offreForm.get('ville')?.hasError('minlength')">
-            Minimum 2 caractères
-          </mat-error>
+          <mat-error *ngIf="offreForm.get('ville')?.hasError('required')">La ville est obligatoire</mat-error>
+          <mat-error *ngIf="offreForm.get('ville')?.hasError('minlength')">Minimum 2 caractères</mat-error>
         </mat-form-field>
 
-         <!-- Pays -->
+        <!-- Pays -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Pays</mat-label>
           <input matInput formControlName="pays" placeholder="Ex: Canada">
-          <mat-error *ngIf="offreForm.get('pays')?.hasError('required')">
-            La ville est obligatoire
-          </mat-error>
-          <mat-error *ngIf="offreForm.get('pays')?.hasError('minlength')">
-            Minimum 2 caractères
-          </mat-error>
+          <mat-error *ngIf="offreForm.get('pays')?.hasError('required')">Le pays est obligatoire</mat-error>
+          <mat-error *ngIf="offreForm.get('pays')?.hasError('minlength')">Minimum 2 caractères</mat-error>
         </mat-form-field>
 
-        <!-- Actif -->
-        <mat-slide-toggle formControlName="active">Offre active</mat-slide-toggle>
+        <!-- Actif : visible uniquement pour les admins -->
+        <mat-slide-toggle *ngIf="isAdmin" formControlName="active">
+          Offre active
+        </mat-slide-toggle>
 
-        <!-- Recruteur (liste déroulante) -->
-        <mat-form-field appearance="outline" class="full-width">
+        <!-- Recruteur (liste déroulante visible seulement si Admin) -->
+        <mat-form-field *ngIf="isAdmin" appearance="outline" class="full-width">
           <mat-label>Recruteur</mat-label>
           <mat-select formControlName="recruteurId" placeholder="Sélectionnez un recruteur">
             <mat-option *ngFor="let recruteur of recruteurs" [value]="recruteur.id">
@@ -78,6 +58,38 @@
           </mat-select>
           <mat-error *ngIf="offreForm.get('recruteurId')?.hasError('required')">
             Le recruteur est obligatoire
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Employeur (liste déroulante visible seulement si Admin) -->
+        <mat-form-field *ngIf="isAdmin" appearance="outline" class="full-width">
+          <mat-label>Employeur</mat-label>
+          <mat-select formControlName="employeurId" placeholder="Sélectionnez un employeur">
+            <mat-option *ngFor="let employeur of employeurs" [value]="employeur.id">
+              {{ employeur.nom }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="offreForm.get('employeurId')?.hasError('required')">
+            L'employeur est obligatoire
+          </mat-error>
+        </mat-form-field>
+
+        <!-- ⚙️ Pour les employeurs connectés : affichage en lecture seule -->
+        <div *ngIf="isEmployeur" class="readonly-field">
+          <p><strong>Employeur :</strong> {{ employeurName || 'Chargement...' }}</p>
+          <p class="info-text">L’offre sera validée par un administrateur avant publication.</p>
+        </div>
+
+
+        <!-- Date de fin d'affichage -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date de fin d'affichage</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateFinAffichage" placeholder="Choisissez une date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-error *ngIf="offreForm.get('dateFinAffichage')?.hasError('required')">
+            La date de fin d'affichage est obligatoire
           </mat-error>
         </mat-form-field>
 

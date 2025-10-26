@@ -1,0 +1,25 @@
+<div class="notification-bell" [matMenuTriggerFor]="notifMenu">
+  <button mat-icon-button>
+    <mat-icon>notifications</mat-icon>
+    <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+  </button>
+</div>
+
+<mat-menu #notifMenu="matMenu" class="notif-menu" [@dropdownAnimation]>
+  <div class="notif-header">Notifications</div>
+
+  <ng-container *ngIf="notifications.length > 0; else noNotif">
+    <div class="notif-item"
+         *ngFor="let notif of notifications"
+         [class.unread]="!notif.isRead"
+         (click)="markAsRead(notif)">
+      <p>{{ notif.message }}</p>
+      <small>{{ notif.timestamp | date:'short' }}</small>
+    </div>
+  </ng-container>
+
+  <ng-template #noNotif>
+    <div class="empty">Aucune notification</div>
+  </ng-template>
+</mat-menu>
+

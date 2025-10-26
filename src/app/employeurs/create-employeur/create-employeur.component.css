@@ -1,0 +1,45 @@
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #1976d2;
+  margin-bottom: 10px;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 48%;
+  margin-right: 2%;
+}
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.button-group {
+  width: 100%;
+  text-align: right;
+  margin-top: 20px;
+}
+
+button {
+  margin-left: 10px;
+}

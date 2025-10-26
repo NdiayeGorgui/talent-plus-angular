@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
 
@@ -15,9 +15,13 @@ export interface UserProfileDTO {
   nom: string;
   prenom?: string;
   email: string;
+  emailContact?: string;
   telephone?: string;
   dateNaissance?: string;
   adresse?: string;
+  niveauEtude?: string;
+  poste?: string;
+  niveau?: string;
 
   // Pour candidat
   metadonneeRH?: MetadonneeRHDTO;
@@ -25,6 +29,7 @@ export interface UserProfileDTO {
   lettres?: LettreDTO[];
   experiences?: ExperienceDTO[];
   competences?: CompetenceDTO[];
+  competenceLinguistiques?: CompetenceLingustiqueDTO[];
 
   // Pour recruteur / employeur
   offres?: OffreDTO[];
@@ -39,7 +44,7 @@ export interface CandidatDTO {
   telephone?: string;
   dateNaissance?: string; // ISO string pour LocalDate
   adresse?: string;
-  disponibilite?: string;
+  niveauEtude?: string;
 }
 
 export interface CandidatResponseDTO {
@@ -50,12 +55,14 @@ export interface CandidatResponseDTO {
   telephone: string;
   dateNaissance: string;   //  en JSON ce sera une string (ex: "1990-05-01")
   adresse: string;
+  niveauEtude?: string;
   metadonneeRH: MetadonneeRHDTO;
 
   cvs: CvDTO[];
   lettres: LettreDTO[];
   experiences: ExperienceDTO[];
   competences: CompetenceDTO[];
+  competenceLingustiques: CompetenceLingustiqueDTO[];
 }
 
 export interface MetadonneeRHDTO {
@@ -72,13 +79,15 @@ export interface MetadonneeRHDTO {
 export interface OffreDTO {
   id?: number;
   titre: string;
-  description: string;
+  description?: string;
   datePublication?: string; // ISO string pour LocalDateTime
-  categorie: string;
-  ville: string;
-  pays: string;
+  dateFinAffichage?: string; // ISO string pour LocalDateTime
+  categorie?: string;
+  ville?: string;
+  pays?: string;
   active: boolean;
   recruteurId: number;
+  employeurId: number;
 }
 
 export interface RecruteurDTO {
@@ -89,6 +98,16 @@ export interface RecruteurDTO {
   telephone: string;
   poste: string;
   niveau: string;
+}
+
+export interface AdminDTO {
+  id?: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string;
+  poste: string;
+
 }
 
 export interface StatutCountDTO {
@@ -118,6 +137,8 @@ export interface ProcessusDTO {
   typeCandidature: string;
   statut: string;
   dateMaj?: string; // LocalDateTime en Java → string (ISO) en TS
+  titreOffre: string;
+  categorieOffre: string;
 }
 
 // ======================
@@ -161,9 +182,42 @@ export interface ExperienceDTO {
 export interface CompetenceDTO {
   id?: number;
   libelle: string;
-  niveau: 'JUNIOR' | 'INTERMEDIAIRE' | 'SENIOR';
+  niveau: 'DEBUTANT' | 'INTERMEDIAIRE' | 'EXPERT';
 }
 
+export interface CompetenceLingustiqueDTO {
+  id?: number;
+  langue: string;
+  niveau: 'DEBUTANT' | 'INTERMEDIAIRE' | 'EXPERT';
+}
+
+export interface EmployeurDTO {
+  id?: number;
+  nom: string;
+  typeEntreprise: string;
+  emailContact: string;
+  telephone: string;
+  poste: string;
+  adresse: string;
+  ville: string;
+  pays: string;
+}
+
+export interface OffreCountDTO {
+  id: number;
+  nom: string;
+  nombreOffres: number;
+}
+
+export interface Notification {
+  id: number;
+  receiverId: number;
+  receiverType: 'CANDIDAT' | 'RECRUTEUR' | 'EMPLOYEUR' | 'ADMIN';
+  typeEvenement: string;
+  message: string;
+  isRead: boolean;
+  timestamp: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -188,8 +242,16 @@ export class TalentService {
   }
 
 
-  updateCandidat(id: number, candidat: CandidatDTO): Observable<Object> {
-    return this.httpClient.put(`${environment.backendCandidatHost}/${id}`, candidat);
+  updateCandidatProfile(id: number, candidat: CandidatDTO): Observable<UserProfileDTO> {
+    return this.httpClient.put<UserProfileDTO>(`${environment.backendCandidatHost}/${id}`, candidat);
+  }
+
+  updateRecruteurProfile(id: number, recruteur: RecruteurDTO): Observable<UserProfileDTO> {
+    return this.httpClient.put<UserProfileDTO>(`${environment.backendRecruteurHost}/${id}`, recruteur);
+  }
+
+  updateAdminProfile(id: number, admin: AdminDTO): Observable<UserProfileDTO> {
+    return this.httpClient.put<UserProfileDTO>(`${environment.backendRecruteurHost}/admin/${id}`, admin);
   }
 
   deleteCandidat(id: number): Observable<Object> {
@@ -263,6 +325,15 @@ export class TalentService {
     return this.httpClient.get<CompetenceFrequencyDTO[]>(`${environment.backendStatHost}/competences/competences-frequentes`);
   }
 
+  getOffresParEmployeur() {
+  return this.httpClient.get<OffreCountDTO[]>(`${environment.backendStatHost}/offres/employeurs`);
+}
+
+getOffresParRecruteur() {
+  return this.httpClient.get<OffreCountDTO[]>(`${environment.backendStatHost}/offres/recruteurs`);
+}
+
+
   postuler(dto: PostulerDTO): Observable<ProcessusDTO> {
     return this.httpClient.post<ProcessusDTO>(
       `${environment.backendRecrutementHost}/postuler`,
@@ -270,12 +341,42 @@ export class TalentService {
     );
   }
 
-    postulerSpontanee(dto: PostulerDTO): Observable<ProcessusDTO> {
+  postulerSpontanee(dto: PostulerDTO): Observable<ProcessusDTO> {
     return this.httpClient.post<ProcessusDTO>(
       `${environment.backendRecrutementHost}/spontanee`,
       dto
     );
   }
+
+  // ==========================
+// 🌐 Gestion des Employeurs
+// ==========================
+
+getEmployeurs(): Observable<EmployeurDTO[]> {
+  return this.httpClient.get<EmployeurDTO[]>(`${environment.backendEmployeurHost}`);
+}
+
+getEmployeurById(id: number): Observable<EmployeurDTO> {
+  return this.httpClient.get<EmployeurDTO>(`${environment.backendEmployeurHost}/${id}`);
+}
+
+createEmployeur(employeur: EmployeurDTO): Observable<EmployeurDTO> {
+  return this.httpClient.post<EmployeurDTO>(`${environment.backendEmployeurHost}`, employeur);
+}
+
+updateEmployeur(id: number, employeur: EmployeurDTO): Observable<EmployeurDTO> {
+  return this.httpClient.put<EmployeurDTO>(`${environment.backendEmployeurHost}/${id}`, employeur);
+}
+
+deleteEmployeur(id: number): Observable<void> {
+  return this.httpClient.delete<void>(`${environment.backendEmployeurHost}/${id}`);
+}
+
+getEmployeurByEmail(email: string): Observable<EmployeurDTO> {
+  return this.httpClient.get<EmployeurDTO>(`${environment.backendEmployeurHost}/email/${email}`);
+}
+
+
 
   // ======================
   //  Compétences
@@ -290,6 +391,10 @@ export class TalentService {
 
   deleteCompetence(competenceId: number): Observable<void> {
     return this.httpClient.delete<void>(`${environment.backendCompetenceHost}/${competenceId}`);
+  }
+
+   updateCompetencesLinguistiques(candidatId: number, competences: CompetenceLingustiqueDTO[]): Observable<void> {
+    return this.httpClient.put<void>(`${environment.backendCompetenceLinguistiqueHost}/${candidatId}`, competences);
   }
 
   // ======================
@@ -326,6 +431,14 @@ export class TalentService {
     return this.httpClient.delete<void>(`${environment.backendCvHost}/${cvId}`);
   }
 
+ replaceCv(cvId: number, file: File, titre: string): Observable<CvDTO> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('titre', titre);
+    return this.httpClient.put<CvDTO>(`${environment.backendCvHost}/${cvId}/replace`, formData);
+  }
+
+
   // ======================
   //  Lettres de motivation
   // ======================
@@ -339,6 +452,8 @@ export class TalentService {
     formData.append('titre', titre);
     return this.httpClient.post<LettreDTO>(`${environment.backendLettreHost}/${candidatId}/upload`, formData);
   }
+
+
 
   replaceLettre(lettreId: number, file: File, titre: string): Observable<LettreDTO> {
     const formData = new FormData();
@@ -403,30 +518,99 @@ export class TalentService {
   }
 
   addMetadonneeRH(candidatId: number, dto: MetadonneeRHDTO): Observable<MetadonneeRHDTO> {
-  return this.httpClient.post<MetadonneeRHDTO>(
+    return this.httpClient.post<MetadonneeRHDTO>(
+      `${environment.backendMetadonneeRhHost}/${candidatId}`,
+      dto
+    );
+  }
+
+
+updateMetadonneeRH(candidatId: number, dto: MetadonneeRHDTO): Observable<MetadonneeRHDTO> {
+  return this.httpClient.put<MetadonneeRHDTO>(
     `${environment.backendMetadonneeRhHost}/${candidatId}`,
     dto
   );
 }
 
 
-  updateMetadonneeRH(id: number, dto: MetadonneeRHDTO): Observable<MetadonneeRHDTO> {
-    return this.httpClient.put<MetadonneeRHDTO>(`${environment.backendMetadonneeRhHost}/${id}`, dto);
-  }
-
   deleteMetadonneeRH(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${environment.backendMetadonneeRhHost}/${id}`);
   }
 
-lierCandidatureSpontanee(processusId: number, offreId: number): Observable<ProcessusDTO> {
-  return this.httpClient.put<ProcessusDTO>(
-    `${environment.backendRecrutementHost}/${processusId}/lier-offre/${offreId}`,
-    {}
+  lierCandidatureSpontanee(processusId: number, offreId: number): Observable<ProcessusDTO> {
+    return this.httpClient.put<ProcessusDTO>(
+      `${environment.backendRecrutementHost}/${processusId}/lier-offre/${offreId}`,
+      {}
+    );
+  }
+
+  getMyProfile(): Observable<UserProfileDTO> {
+    return this.httpClient.get<UserProfileDTO>(`${environment.backendUtilisateurdHost}/me`);
+  }
+
+  // ======================
+  // Compétences Linguistiques
+  // ======================
+
+  getCompetencesLinguistiques(candidatId: number): Observable<CompetenceLingustiqueDTO[]> {
+    return this.httpClient.get<CompetenceLingustiqueDTO[]>(
+      `${environment.backendCompetenceLinguistiqueHost}/${candidatId}`
+    );
+  }
+
+  addCompetencesLinguistiques(candidatId: number, competences: CompetenceLingustiqueDTO[]): Observable<CompetenceLingustiqueDTO[]> {
+    return this.httpClient.post<CompetenceLingustiqueDTO[]>(
+      `${environment.backendCompetenceLinguistiqueHost}/${candidatId}`,
+      competences
+    );
+  }
+
+  deleteCompetenceLinguistique(id: number): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${environment.backendCompetenceLinguistiqueHost}/${id}`
+    );
+  }
+
+  getCandidatsByRecruteur(recruteurId: number): Observable<CandidatDTO[]> {
+    return this.httpClient.get<number[]>(`${environment.backendRecrutementHost}/recruteur/${recruteurId}/candidats`).pipe(
+      switchMap((candidatIds: number[]) =>
+        this.httpClient.post<CandidatDTO[]>(`${environment.backendCandidatHost}/ids`, candidatIds)
+      )
+    );
+  }
+
+  getRecruteurIdByEmail(email: string): Observable<number> {
+    return this.httpClient.get<number>(`${environment.backendRecruteurHost}/email/${email}/id`);
+  }
+
+    getEmployeurIdByEmail(email: string): Observable<number> {
+    return this.httpClient.get<number>(`${environment.backendEmployeurHost}/email/${email}/id`);
+  }
+
+  getCandidatByEmail(email: string): Observable<CandidatResponseDTO> {
+    return this.httpClient.get<CandidatResponseDTO>(`${environment.backendCandidatHost}/email/${email}`);
+  }
+  
+  // Vérifie si le candidat a déjà postulé à une offre
+hasAlreadyApplied(candidatId: number, offreId: number) {
+  return this.httpClient.get<boolean>(`${environment.backendRecrutementHost}/existe/${candidatId}/${offreId}`);
+}
+
+
+getUnreadNotifications(userId: number, type: 'CANDIDAT' | 'RECRUTEUR' | 'EMPLOYEUR' | 'ADMIN'): Observable<Notification[]> {
+  const params = new HttpParams().set('receiverType', type); // ✅ correspond à @RequestParam("receiverType")
+  return this.httpClient.get<Notification[]>(
+    `${environment.backendNotificationHost}/user/${userId}/unread`,
+    { params }
   );
 }
 
-getMyProfile(): Observable<UserProfileDTO> {
-  return this.httpClient.get<UserProfileDTO>(`${environment.backendUtilisateurdHost}/me`);
+
+markAsRead(notificationId: number): Observable<void> {
+  return this.httpClient.patch<void>(
+    `${environment.backendNotificationHost}/${notificationId}/read`,
+    {} // corps vide pour PATCH
+  );
 }
 
 }

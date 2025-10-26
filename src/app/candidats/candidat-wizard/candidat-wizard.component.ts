@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TalentService, CandidatDTO, PostulerDTO } from '../../services/talent.service';
+import { TalentService, CandidatDTO, PostulerDTO, CompetenceLingustiqueDTO, CompetenceDTO } from '../../services/talent.service';
 
 @Component({
   selector: 'app-candidat-wizard',
@@ -16,7 +16,8 @@ export class CandidatWizardComponent implements OnInit {
 
   // 🔹 Données globales
   candidatDTO: CandidatDTO | null = null;
-  competences: any[] = [];
+  competences: any[] = [];  
+  competencesLinguistiques: any[] = [];
   experiences: any[] = [];
   cv: any;
   lettre: any;
@@ -40,16 +41,23 @@ export class CandidatWizardComponent implements OnInit {
       telephone: ['', Validators.required],
       dateNaissance: ['', Validators.required],
       adresse: [''],
-      //disponibilite: ['DISPONIBLE']
+      niveauEtude: ['',Validators.required]
     });
   }
 
   // =====================
   // Handlers des enfants
   // =====================
-  onCompetencesSaved(list: any[]) {
-    this.competences = list;
-  }
+  // onCompetencesSaved(list: any[]) {
+  //   this.competences = list;
+  // }
+
+onCompetencesSaved(data: { techniques: CompetenceDTO[]; linguistiques: CompetenceLingustiqueDTO[] }) {
+  this.competences = data.techniques;
+  this.competencesLinguistiques = data.linguistiques;
+}
+
+
 
   onExperiencesSaved(list: any[]) {
     this.experiences = list;
@@ -85,63 +93,65 @@ export class CandidatWizardComponent implements OnInit {
   // =====================
   // Soumission
   // =====================
-  submit() {
-    const candidat: CandidatDTO = {
-      ...this.candidatForm.value
-    };
+submit() {
+  const candidat: CandidatDTO = {
+    ...this.candidatForm.value
+  };
 
-    this.talentService.createCandidat(candidat).subscribe({
-      next: (created: CandidatDTO) => {
-        const candidatId = created.id!;
-        this.candidatDTO = created;
+  this.talentService.createCandidat(candidat).subscribe({
+    next: (created: CandidatDTO) => {
+      const candidatId = created.id!;
+      this.candidatDTO = created;
 
-        // 1. Ajouter les compétences
-        this.talentService.addCompetences(candidatId, this.competences).subscribe({
-          next: () => {
-            // 2. Ajouter les expériences
-            this.talentService.addExperiences(candidatId, this.experiences).subscribe({
-              next: () => {
-                // 3. Ajouter les métadonnées RH (❗️NOUVEAU BLOC)
-                console.log('📤 Envoi des métadonnées RH :', this.metadonneeRH);
-
-                this.talentService.addMetadonneeRH(candidatId, this.metadonneeRH).subscribe({
-                  next: () => {
-                    // 4. Upload du CV
-                    if (this.cv) {
-                      const { file, titre } = this.cv;
-
-                      this.talentService.uploadCv(candidatId, file, titre).subscribe({
-                        next: () => {
-                          // 5. Upload de la lettre
-                          if (this.lettre) {
-                            const { file: lettreFile, titre: lettreTitre } = this.lettre;
-
-                            this.talentService.uploadLettre(candidatId, lettreFile, lettreTitre).subscribe({
-                              next: () => this.postuler(candidatId),
-                              error: err => console.error('❌ Erreur upload lettre:', err)
-                            });
-                          } else {
-                            this.postuler(candidatId);
-                          }
-                        },
-                        error: err => console.error('❌ Erreur upload CV:', err)
-                      });
-                    } else {
-                      this.postuler(candidatId);
-                    }
-                  },
-                  error: err => console.error('❌ Erreur ajout métadonnées RH:', err)
-                });
-              },
-              error: err => console.error('❌ Erreur ajout expériences:', err)
-            });
-          },
-          error: err => console.error('❌ Erreur ajout compétences:', err)
-        });
-      },
-      error: err => console.error('❌ Erreur création candidat:', err)
-    });
-  }
+      // 1. Ajouter les compétences techniques
+      this.talentService.addCompetences(candidatId, this.competences).subscribe({
+        next: () => {
+          // 1.b Ajouter les compétences linguistiques
+          this.talentService.addCompetencesLinguistiques(candidatId, this.competencesLinguistiques).subscribe({
+            next: () => {
+              // 2. Ajouter les expériences
+              this.talentService.addExperiences(candidatId, this.experiences).subscribe({
+                next: () => {
+                  // 3. Ajouter les métadonnées RH
+                  this.talentService.addMetadonneeRH(candidatId, this.metadonneeRH).subscribe({
+                    next: () => {
+                      // 4. Upload du CV
+                      if (this.cv) {
+                        const { file, titre } = this.cv;
+                        this.talentService.uploadCv(candidatId, file, titre).subscribe({
+                          next: () => {
+                            // 5. Upload lettre
+                            if (this.lettre) {
+                              const { file: lettreFile, titre: lettreTitre } = this.lettre;
+                              this.talentService.uploadLettre(candidatId, lettreFile, lettreTitre).subscribe({
+                                next: () => this.postuler(candidatId),
+                                error: err => console.error('❌ Erreur upload lettre:', err)
+                              });
+                            } else {
+                              this.postuler(candidatId);
+                            }
+                          },
+                          error: err => console.error('❌ Erreur upload CV:', err)
+                        });
+                      } else {
+                        this.postuler(candidatId);
+                      }
+                    },
+                    error: err => console.error('❌ Erreur ajout métadonnées RH:', err)
+                  });
+                },
+                error: err => console.error('❌ Erreur ajout expériences:', err)
+              });
+            },
+            error: err => console.error('❌ Erreur ajout compétences linguistiques:', err)
+          });
+        },
+        error: err => console.error('❌ Erreur ajout compétences:', err)
+      });
+    },
+    error: err => console.error('❌ Erreur création candidat:', err)
+  });
+}
 
 
   annuler() {
@@ -180,43 +190,47 @@ submitSpontanee() {
       const candidatId = created.id!;
       this.candidatDTO = created;
 
-      // 1. Ajouter les compétences
+      // 1. Ajouter les compétences techniques
       this.talentService.addCompetences(candidatId, this.competences).subscribe({
         next: () => {
-          // 2. Ajouter les expériences
-          this.talentService.addExperiences(candidatId, this.experiences).subscribe({
+          // 1.b Ajouter les compétences linguistiques
+          this.talentService.addCompetencesLinguistiques(candidatId, this.competencesLinguistiques).subscribe({
             next: () => {
-              // 3. Ajouter les métadonnées RH
-              this.talentService.addMetadonneeRH(candidatId, this.metadonneeRH).subscribe({
+              // 2. Ajouter les expériences
+              this.talentService.addExperiences(candidatId, this.experiences).subscribe({
                 next: () => {
-                  // 4. Upload du CV
-                  if (this.cv) {
-                    const { file, titre } = this.cv;
-
-                    this.talentService.uploadCv(candidatId, file, titre).subscribe({
-                      next: () => {
-                        // 5. Upload lettre (facultatif)
-                        if (this.lettre) {
-                          const { file: lettreFile, titre: lettreTitre } = this.lettre;
-
-                          this.talentService.uploadLettre(candidatId, lettreFile, lettreTitre).subscribe({
-                            next: () => this.postulerSpontanee(candidatId),
-                            error: err => console.error('❌ Erreur upload lettre:', err)
-                          });
-                        } else {
-                          this.postulerSpontanee(candidatId);
-                        }
-                      },
-                      error: err => console.error('❌ Erreur upload CV:', err)
-                    });
-                  } else {
-                    this.postulerSpontanee(candidatId);
-                  }
+                  // 3. Ajouter les métadonnées RH
+                  this.talentService.addMetadonneeRH(candidatId, this.metadonneeRH).subscribe({
+                    next: () => {
+                      // 4. Upload CV
+                      if (this.cv) {
+                        const { file, titre } = this.cv;
+                        this.talentService.uploadCv(candidatId, file, titre).subscribe({
+                          next: () => {
+                            // 5. Upload lettre
+                            if (this.lettre) {
+                              const { file: lettreFile, titre: lettreTitre } = this.lettre;
+                              this.talentService.uploadLettre(candidatId, lettreFile, lettreTitre).subscribe({
+                                next: () => this.postulerSpontanee(candidatId),
+                                error: err => console.error('❌ Erreur upload lettre:', err)
+                              });
+                            } else {
+                              this.postulerSpontanee(candidatId);
+                            }
+                          },
+                          error: err => console.error('❌ Erreur upload CV:', err)
+                        });
+                      } else {
+                        this.postulerSpontanee(candidatId);
+                      }
+                    },
+                    error: err => console.error('❌ Erreur ajout métadonnées RH:', err)
+                  });
                 },
-                error: err => console.error('❌ Erreur ajout métadonnées RH:', err)
+                error: err => console.error('❌ Erreur ajout expériences:', err)
               });
             },
-            error: err => console.error('❌ Erreur ajout expériences:', err)
+            error: err => console.error('❌ Erreur ajout compétences linguistiques:', err)
           });
         },
         error: err => console.error('❌ Erreur ajout compétences:', err)
@@ -225,6 +239,7 @@ submitSpontanee() {
     error: err => console.error('❌ Erreur création candidat:', err)
   });
 }
+
 
 
 }

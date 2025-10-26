@@ -1,0 +1,17 @@
+.custom-snackbar-success {
+  background-color: #4caf50;
+  color: white;
+   font-weight: bold;
+  text-align: center;
+  padding: 1px;
+  border-radius: 1px;
+}
+
+.custom-snackbar-error {
+  background-color: #f44336;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 1px;
+  border-radius: 1px;
+}

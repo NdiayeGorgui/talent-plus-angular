@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RecruteurDTO, TalentService } from '../../services/talent.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SnakBarComponent } from '../../shared/snak-bar/snak-bar.component';
 
 @Component({
   selector: 'app-create-recruteur',
   standalone: false,
   templateUrl: './create-recruteur.component.html',
-  styleUrl: './create-recruteur.component.css'
+  styleUrls: ['./create-recruteur.component.css']
 })
 export class CreateRecruteurComponent implements OnInit {
   recruteurForm!: FormGroup;
@@ -18,9 +19,9 @@ export class CreateRecruteurComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private talentService: TalentService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar, // ✅ on garde MatSnackBar pour ouvrir ton composant custom
     public router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.recruteurForm = this.fb.group({
@@ -29,14 +30,13 @@ export class CreateRecruteurComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telephone: ['', Validators.required],
       poste: [''],
-      niveau: ['', Validators.required] // ✅ Ici c'est bien un tableau : [valeur initiale, validateurs]
+      niveau: ['', Validators.required]
     });
-
   }
 
   onSubmit(): void {
     if (this.recruteurForm.invalid) {
-      this.snackBar.open('⚠️ Veuillez remplir tous les champs obligatoires', 'Fermer', { duration: 3000 });
+      this.openSnack('⚠️ Veuillez remplir tous les champs obligatoires', 'error');
       return;
     }
 
@@ -45,13 +45,26 @@ export class CreateRecruteurComponent implements OnInit {
 
     this.talentService.createRecruteur(recruteur).subscribe({
       next: () => {
-        this.snackBar.open('✅ Recruteur créé avec succès', 'Fermer', { duration: 3000 });
-        this.router.navigate(['/recruteurs']); // redirection vers la liste
-      },
-      error: () => {
-        this.snackBar.open('❌ Erreur lors de la création du recruteur', 'Fermer', { duration: 3000 });
         this.loading = false;
+        this.openSnack('✅ Recruteur créé avec succès', 'success');
+        this.router.navigate(['/recruteurs']);
+      },
+      error: (err) => {
+        console.error('Erreur création recruteur', err);
+        this.loading = false;
+        this.openSnack('❌ Erreur lors de la création du recruteur', 'error');
       }
+    });
+  }
+
+  /** ✅ Utilise ton composant SnakBar personnalisé */
+  openSnack(message: string, type: 'success' | 'error') {
+    this.snackBar.openFromComponent(SnakBarComponent, {
+      data: { message, type },
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error']
     });
   }
 }

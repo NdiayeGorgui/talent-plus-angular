@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -36,6 +36,19 @@ import { HistoriqueDialogComponent } from './recrutements/historique-dialog/hist
 import { MetadonneeRhStepComponent } from './candidats/metadonnee-rh-step/metadonnee-rh-step.component';
 import { CandidatureSpontaneeComponent } from './candidats/candidature-spontanee/candidature-spontanee.component';
 import { ProfilComponent } from './profil/profil.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { LoginRegisterComponent } from './auth/login-register/login-register.component';
+import { QuillModule } from 'ngx-quill';
+import 'quill/dist/quill.snow.css';
+import { MesApplicationsComponent } from './recrutements/mes-applications/mes-applications.component';
+import { CreateEmployeurComponent } from './employeurs/create-employeur/create-employeur.component';
+import { EmployeurListComponent } from './employeurs/employeur-list/employeur-list.component';
+import { PosterOffreComponent } from './employeurs/poster-offre/poster-offre.component';
+import { EmployeurDetailsComponent } from './employeurs/employeur-details/employeur-details.component';
+import { EmployeurWizardComponent } from './employeurs/employeur-wizard/employeur-wizard.component';
+import { InfoComponent } from './info/info.component';
+import { NotificationBellComponent } from './notification-bell/notification-bell.component';
+import { SnakBarComponent } from './shared/snak-bar/snak-bar.component'; // style par défaut
 
 
 @NgModule({
@@ -69,6 +82,17 @@ import { ProfilComponent } from './profil/profil.component';
     MetadonneeRhStepComponent,
     CandidatureSpontaneeComponent,
     ProfilComponent,
+    LoginRegisterComponent,
+    MesApplicationsComponent,
+    CreateEmployeurComponent,
+    EmployeurListComponent,
+    PosterOffreComponent,
+    EmployeurDetailsComponent,
+    EmployeurWizardComponent,
+    InfoComponent,
+    NotificationBellComponent,
+  
+    SnakBarComponent,
     
   ],
   imports: [
@@ -79,9 +103,12 @@ import { ProfilComponent } from './profil/profil.component';
     HttpClientModule,
     AppRoutingModule,
     NgChartsModule,
+    QuillModule.forRoot(),
     MaterialModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

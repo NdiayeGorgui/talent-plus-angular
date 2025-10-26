@@ -4,10 +4,16 @@
 <p><strong>Email :</strong> {{ candidat?.email }}</p>
 <p><strong>Téléphone :</strong> {{ candidat?.telephone }}</p>
 <p><strong>Adresse :</strong> {{ candidat?.adresse }}</p>
+<p><strong>Diplome :</strong> {{ candidat?.niveauEtude }}</p>
 
 <h4>Compétences</h4>
 <ul>
+  <h5>Compétences techniques</h5>
   <li *ngFor="let c of competences">{{ c.libelle }} ({{ c.niveau }})</li>
+</ul>
+<ul>
+  <h5>Compétences lingustiques</h5>
+  <li *ngFor="let c of competenceLinguistiques">{{ c.langue }} ({{ c.niveau }})</li>
 </ul>
 
 <h4>Expériences</h4>

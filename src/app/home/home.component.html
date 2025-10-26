@@ -1,24 +1,24 @@
 <div class="home-root">
   <h1>Bienvenue sur Talent+</h1>
-  <p class="subtitle">La plateforme qui met en relation candidats et recruteurs.</p>
+  <p class="subtitle">La plateforme qui met en relation candidats, recruteurs et employeurs.</p>
 
 <div class="cards">
-  <mat-card class="home-card clickable" routerLink="/offres">
-    <mat-card-title>Pour les candidats</mat-card-title>
+  <mat-card class="home-card clickable" [routerLink]="['/info', 'candidat']">
+    <mat-card-title>Candidats</mat-card-title>
     <mat-card-content>
       Recherchez et postulez aux meilleures offres d’emploi.
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="home-card clickable" routerLink="">
-    <mat-card-title>Pour les recruteurs</mat-card-title>
+  <mat-card class="home-card clickable" [routerLink]="['/info', 'recruteur']">
+    <mat-card-title>Recruteurs</mat-card-title>
     <mat-card-content>
       Trouvez rapidement les meilleurs talents.
     </mat-card-content>
   </mat-card>
 
-   <mat-card class="home-card clickable" routerLink="">
-    <mat-card-title>Pour les employeurs</mat-card-title>
+   <mat-card class="home-card clickable" [routerLink]="['/info', 'employeur']">
+    <mat-card-title>Employeurs</mat-card-title>
     <mat-card-content>
       Poster vos offres et trouver rapidement un candidat.
     </mat-card-content>

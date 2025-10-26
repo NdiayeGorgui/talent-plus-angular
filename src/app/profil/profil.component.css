@@ -1,0 +1,106 @@
+
+mat-card {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+mat-card-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.experience-item {
+  align-items: flex-start; /* aligne le contenu en haut */
+  white-space: normal;     /* permet les retours à la ligne */
+  height: auto !important; /* s’adapte au contenu */
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.experience-content {
+  width: 100%;
+  overflow: visible;
+  word-wrap: break-word; /* casse les longues phrases */
+}
+
+.offre-item {
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.offre-content {
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.status {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.status.active {
+  color: green;
+}
+
+.status.inactive {
+  color: red;
+}
+
+mat-card {
+  margin-top: 20px;
+  padding: 16px;
+}
+
+mat-card-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+button[mat-flat-button] {
+  margin-top: 10px;
+}
+
+/* Optionnel : espace sous la carte */
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.langue-container {
+  margin-bottom: 1rem;
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.langue-label {
+  display: block;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 15px;
+  margin-bottom: 0.4rem;
+}
+
+.niveau-field {
+  width: 100%;
+}
+.text-muted {
+  color: #6c757d;
+  font-style: italic;
+}
+

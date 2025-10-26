@@ -1,34 +1,34 @@
 <div class="stats-container">
   <h2>📊 Tableau de bord</h2>
-  <h4>Suivez vos statistiques et notifications en temps réel.</h4>
+  <h4>Suivez vos statistiques et indicateurs clés.</h4>
 
   <!-- Pie Chart -->
   <div class="chart-card">
     <h3>Candidatures par statut</h3>
-    <canvas baseChart
-            [data]="statutData"
-            [options]="statutOptions"
-            chartType="pie">
-    </canvas>
+    <canvas baseChart [data]="statutData" [options]="statutOptions" chartType="pie"></canvas>
   </div>
 
   <!-- Bar Chart -->
   <div class="chart-card">
     <h3>Candidatures par mois</h3>
-    <canvas baseChart
-            [data]="moisData"
-            [options]="moisOptions"
-            chartType="bar">
-    </canvas>
+    <canvas baseChart [data]="moisData" [options]="moisOptions" chartType="bar"></canvas>
   </div>
 
-  <!-- Horizontal Bar Chart -->
+  <!-- Compétences fréquentes -->
   <div class="chart-card">
     <h3>Compétences les plus fréquentes</h3>
-    <canvas baseChart
-            [data]="competenceData"
-            [options]="competenceOptions"
-            chartType="bar">
-    </canvas>
+    <canvas baseChart [data]="competenceData" [options]="competenceOptions" chartType="bar"></canvas>
+  </div>
+
+  <!-- 🏢 Offres par employeur -->
+  <div class="chart-card">
+    <h3>Offres publiées par employeur</h3>
+    <canvas baseChart [data]="employeurData" [options]="employeurOptions" chartType="bar"></canvas>
+  </div>
+
+  <!-- 👔 Offres par recruteur -->
+  <div class="chart-card">
+    <h3>Offres affectées par recruteur</h3>
+    <canvas baseChart [data]="recruteurData" [options]="recruteurOptions" chartType="bar"></canvas>
   </div>
 </div>

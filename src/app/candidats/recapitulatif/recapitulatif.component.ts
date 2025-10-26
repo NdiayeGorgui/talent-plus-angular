@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CompetenceDTO, CvDTO, ExperienceDTO, LettreDTO } from '../../services/talent.service';
+import { CompetenceDTO, CompetenceLingustiqueDTO, CvDTO, ExperienceDTO, LettreDTO } from '../../services/talent.service';
 
 
 @Component({
@@ -11,8 +11,9 @@ import { CompetenceDTO, CvDTO, ExperienceDTO, LettreDTO } from '../../services/t
 export class RecapitulatifComponent {
   @Input() candidat: any;
   @Input() competences!: CompetenceDTO[];
+   @Input() competenceLinguistiques!: CompetenceLingustiqueDTO[];
   @Input() experiences!: ExperienceDTO[];
   @Input() cv?: CvDTO;
   @Input() lettre?: LettreDTO;
-   @Input() metadonneeRH: any;
+  @Input() metadonneeRH: any;
 }

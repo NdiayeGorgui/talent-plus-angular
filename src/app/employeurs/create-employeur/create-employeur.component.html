@@ -1,0 +1,83 @@
+<div class="container">
+  <h2>🏢 Ajouter un nouvel employeur</h2>
+  <p>Remplissez le formulaire ci-dessous pour enregistrer un nouvel employeur.</p>
+
+  <form [formGroup]="employeurForm" (ngSubmit)="onSubmit()" class="form-container">
+
+    <!-- Nom de l'entreprise -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nom de l'entreprise</mat-label>
+      <input matInput formControlName="nom" placeholder="Ex : TechCorp" required>
+      <mat-error *ngIf="employeurForm.get('nom')?.hasError('required')">
+        Le nom est obligatoire.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Type d'entreprise -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Type d'entreprise</mat-label>
+      <mat-select formControlName="typeEntreprise" required>
+        <mat-option value="PME">PME</mat-option>
+        <mat-option value="STARTUP">Startup</mat-option>
+        <mat-option value="MULTINATIONALE">Multinationale</mat-option>
+        <mat-option value="AUTRE">Autre</mat-option>
+      </mat-select>
+      <mat-error *ngIf="employeurForm.get('typeEntreprise')?.hasError('required')">
+        Le type d'entreprise est requis.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email de contact</mat-label>
+      <input matInput type="email" formControlName="emailContact" placeholder="exemple@entreprise.com" required>
+      <mat-error *ngIf="employeurForm.get('emailContact')?.hasError('email')">
+        Adresse e-mail invalide.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Téléphone -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Téléphone</mat-label>
+      <input matInput type="tel" formControlName="telephone" placeholder="+1 514 000 0000" required>
+      <mat-error *ngIf="employeurForm.get('telephone')?.hasError('required')">
+        Le numéro de téléphone est requis.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Poste -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Poste du contact</mat-label>
+      <input matInput formControlName="poste" placeholder="Ex : Responsable RH">
+    </mat-form-field>
+
+    <!-- Adresse -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="adresse" placeholder="123 rue Principale">
+    </mat-form-field>
+
+    <!-- Ville -->
+    <mat-form-field appearance="outline" class="half-width">
+      <mat-label>Ville</mat-label>
+      <input matInput formControlName="ville" placeholder="Montréal">
+    </mat-form-field>
+
+    <!-- Pays -->
+    <mat-form-field appearance="outline" class="half-width">
+      <mat-label>Pays</mat-label>
+      <input matInput formControlName="pays" placeholder="Canada">
+    </mat-form-field>
+
+    <!-- Boutons -->
+    <div class="button-group">
+      <button mat-raised-button color="primary" type="submit" [disabled]="employeurForm.invalid">
+        💾 Enregistrer
+      </button>
+      <button mat-stroked-button color="warn" type="button" (click)="onCancel()">
+        ❌ Annuler
+      </button>
+    </div>
+
+  </form>
+</div>

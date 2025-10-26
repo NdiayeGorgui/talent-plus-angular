@@ -44,6 +44,18 @@
                         <mat-label>Adresse</mat-label>
                         <input matInput formControlName="adresse">
                     </mat-form-field>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Niveau d'études</mat-label>
+                        <mat-select formControlName="niveauEtude">
+                            <mat-option value="AEC">AEC</mat-option>
+                            <mat-option value="DEC">DEC</mat-option>
+                            <mat-option value="BACCALEAUREAT">Baccalauréat</mat-option>
+                            <mat-option value="MAITRISE">Maîtrise</mat-option>
+                            <mat-option value="DESS">DESS</mat-option>
+                            <mat-option value="DOCTORAT">Doctorat</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
 
                     <div>
                         <button mat-raised-button matStepperNext [disabled]="!candidatForm.valid">
@@ -60,10 +72,6 @@
                     <app-competences-step (valid)="onCompetencesSaved($event)" (next)="stepper.next()"
                         (previous)="stepper.previous()">
                     </app-competences-step>
-                </div>
-                <div class="step-footer">
-                    <button mat-raised-button matStepperPrevious>Précédent</button>
-                    <button mat-raised-button (click)="stepper.next()">Suivant</button>
                 </div>
             </mat-step>
 
@@ -111,7 +119,7 @@
                 <ng-template matStepLabel>Récapitulatif</ng-template>
 
                 <div style="margin-top: 32px;">
-                    <app-recapitulatif [candidat]="candidatForm.value" [competences]="competences"
+                    <app-recapitulatif [candidat]="candidatForm.value" [competences]="competences" [competenceLinguistiques]="competencesLinguistiques"
                         [experiences]="experiences" [cv]="cv" [lettre]="lettre" [metadonneeRH]="metadonneeRH">
                         <!-- 🛠 AJOUT ICI -->
                     </app-recapitulatif>
@@ -123,7 +131,7 @@
                     <button mat-raised-button matStepperPrevious>Précédent</button>
                     <button mat-raised-button color="warn" (click)="annuler()">Annuler</button>
                     <button mat-raised-button color="accent" (click)="soumettreCandidature()">Postuler</button>
-                    
+
                 </div>
             </mat-step>
 

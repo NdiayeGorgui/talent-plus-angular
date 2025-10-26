@@ -1,0 +1,91 @@
+<div class="container" *ngIf="employeur">
+  <h2>🏢 Détails de l'employeur</h2>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>{{ employeur.nom }}</mat-card-title>
+      <mat-card-subtitle>{{ employeur.typeEntreprise }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="details" *ngIf="!isEditing">
+        <p><strong>Email :</strong> {{ employeur.emailContact }}</p>
+        <p><strong>Téléphone :</strong> {{ employeur.telephone }}</p>
+        <p><strong>Poste :</strong> {{ employeur.poste }}</p>
+        <p><strong>Adresse :</strong> {{ employeur.adresse }}</p>
+        <p><strong>Ville :</strong> {{ employeur.ville }}</p>
+        <p><strong>Pays :</strong> {{ employeur.pays }}</p>
+      </div>
+
+      <!-- 🔧 Mode édition -->
+      <form *ngIf="isEditing" [formGroup]="editForm" class="edit-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Type d'entreprise</mat-label>
+          <mat-select formControlName="typeEntreprise">
+            <mat-option value="PME">PME</mat-option>
+            <mat-option value="MULTINATIONALE">Multinationale</mat-option>
+            <mat-option value="STARTUP">Startup</mat-option>
+            <mat-option value="ASSOCIATION">Association</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="emailContact" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="telephone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Poste</mat-label>
+          <input matInput formControlName="poste" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Adresse</mat-label>
+          <input matInput formControlName="adresse" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Ville</mat-label>
+          <input matInput formControlName="ville" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pays</mat-label>
+          <input matInput formControlName="pays" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" *ngIf="!isEditing" (click)="enableEdit()">
+        ✏️ Modifier
+      </button>
+
+      <button mat-raised-button color="accent" *ngIf="isEditing" (click)="saveChanges()">
+        💾 Enregistrer
+      </button>
+
+      <button mat-raised-button color="warn" *ngIf="isEditing" (click)="cancelEdit()">
+        ❌ Annuler
+      </button>
+
+      <button mat-button (click)="goBack()">⬅️ Retour</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<div *ngIf="!employeur && !isLoading" class="empty">
+  <p>⚠️ Employeur introuvable.</p>
+</div>
+
+<div *ngIf="isLoading" class="loading">Chargement...</div>

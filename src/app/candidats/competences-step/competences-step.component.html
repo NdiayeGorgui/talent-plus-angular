@@ -1,35 +1,86 @@
-<div [formGroup]="competenceForm">
-<mat-form-field appearance="outline" class="w-100">
-  <mat-label>Libellé</mat-label>
-  <mat-select formControlName="libelle">
-    <mat-option *ngFor="let comp of competenceOptions" [value]="comp">
-      {{ comp }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<!-- 🔹 Section Compétences Techniques -->
+<mat-expansion-panel expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>🛠️ Compétences techniques</mat-panel-title>
+  </mat-expansion-panel-header>
 
+  <div [formGroup]="competenceForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Libellé</mat-label>
+      <mat-select formControlName="libelle">
+        <mat-option *ngFor="let comp of competenceOptions" [value]="comp">
+          {{ comp }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Niveau</mat-label>
-    <mat-select formControlName="niveau">
-      <mat-option value="DEBUTANT">Débutant</mat-option>
-      <mat-option value="INTERMEDIAIRE">Intermédiaire</mat-option>
-      <mat-option value="EXPERT">Expert</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Niveau</mat-label>
+      <mat-select formControlName="niveau">
+        <mat-option value="DEBUTANT">Débutant</mat-option>
+        <mat-option value="INTERMEDIAIRE">Intermédiaire</mat-option>
+        <mat-option value="EXPERT">Expert</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <div class="actions">
-    <button mat-flat-button color="primary" (click)="addCompetence()">Ajouter</button>
+    <div class="actions">
+      <button mat-flat-button color="primary" (click)="addCompetence()">Ajouter</button>
+    </div>
   </div>
+
+  <mat-list>
+    <mat-list-item *ngFor="let c of competences; let i = index">
+      {{ c.libelle }} - {{ c.niveau }}
+      <button mat-icon-button color="warn" (click)="removeCompetence(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>
+
+
+<!-- 🌐 Section Compétences Linguistiques -->
+<mat-expansion-panel expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>🌐 Compétences linguistiques</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div [formGroup]="langueForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Langue</mat-label>
+      <mat-select formControlName="langue">
+        <mat-option *ngFor="let lang of languesOptions" [value]="lang">
+          {{ lang }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Niveau</mat-label>
+      <mat-select formControlName="niveau">
+        <mat-option value="DEBUTANT">Débutant</mat-option>
+        <mat-option value="INTERMEDIAIRE">Intermédiaire</mat-option>
+        <mat-option value="EXPERT">Expert</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button color="primary" (click)="addLangue()">Ajouter</button>
+    </div>
+  </div>
+
+  <mat-list>
+    <mat-list-item *ngFor="let l of competencesLinguistiques; let i = index">
+      {{ l.langue }} - {{ l.niveau }}
+      <button mat-icon-button color="warn" (click)="removeLangue(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>
+
+<!-- ✅ Boutons de navigation -->
+<div class="step-footer">
+  <button mat-raised-button color="accent" (click)="goPrevious()">Précédent</button>
+  <button mat-raised-button color="primary" (click)="goNext()">Suivant</button>
 </div>
-
-<ul>
-  <li *ngFor="let c of competences; let i = index">
-    {{ c.libelle }} - {{ c.niveau }}
-    <button mat-icon-button color="warn" (click)="removeCompetence(i)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </li>
-</ul>
-
-
