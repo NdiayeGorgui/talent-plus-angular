@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // ID à configurer dans Jenkins
-        DOCKERHUB_REPO = 'tonDockerHub/nom-de-ton-image'            // ex: gorgui/talent-plus
-        APP_NAME = 'talent-plus-frontend'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') 
+        DOCKERHUB_REPO = 'gorgui/talent-plus-angular'            // ex: gorgui/talent-plus
+        APP_NAME = 'talent-plus-angular'
     }
 
     stages {
