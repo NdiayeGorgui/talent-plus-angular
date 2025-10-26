@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') 
         DOCKERHUB_REPO = 'gorgui/talent-plus-angular'            
         APP_NAME = 'talent-plus-angular'
     }
