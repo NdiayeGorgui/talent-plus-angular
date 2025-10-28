@@ -53,8 +53,6 @@ export class ProfilComponent implements OnInit {
 
   }
 
-
-
   constructor(
     private talentService: TalentService,
     private authService: AuthService,
@@ -208,7 +206,7 @@ export class ProfilComponent implements OnInit {
       } else if (this.isEmployeur) {
         this.editForm = this.fb.group({
           nom: [this.user.nom, Validators.required],
-          email: [{ value: this.user.emailContact, disabled: true }],
+          emailContact: [{ value: this.user.emailContact, disabled: true }],
           telephone: [this.user.telephone],
           poste: [this.user.poste],
 
@@ -229,85 +227,94 @@ export class ProfilComponent implements OnInit {
     this.editMode = false;
   }
 
-  submitProfileUpdate(): void {
-    console.log('submitProfileUpdate appelé');
+submitProfileUpdate(): void {
+  console.log('submitProfileUpdate appelé');
 
-    if (!this.user?.id) {
-      console.warn('submitProfileUpdate: user.id non défini');
-      return;
-    }
-
-    if (!this.editForm.valid) {
-      console.warn('submitProfileUpdate: formulaire invalide', this.editForm.value);
-      return;
-    }
-
-    const updatedData = this.editForm.getRawValue();
-    console.log('Données à envoyer pour mise à jour :', updatedData);
-
-    if (this.isCandidat) {
-      this.talentService.updateCandidatProfile(this.user.id, updatedData).subscribe({
-        next: (response) => {
-          console.log('Réponse updateCandidat:', response);
-          this.openSnack('✅ Profil candidat mis à jour', 'success');
-          this.editMode = false;
-          this.ngOnInit(); // recharger le profil mis à jour
-        },
-        error: (error) => {
-          console.error("Erreur lors de la mise à jour du profil candidat", error);
-          this.openSnack(
-            "❌ Erreur mise à jour du profil : " + (error.message || error.statusText || "Erreur inconnue"),
-            "error"
-          );
-
-        }
-      });
-    } else {
-      console.warn('submitProfileUpdate: rôle non candidat, pas de traitement');
-    }
-
-    if (this.isRecruteur) {
-      this.talentService.updateRecruteurProfile(this.user.id, updatedData).subscribe({
-        next: (response) => {
-          console.log('Réponse updateRecruteur:', response);
-          this.openSnack('✅ Profil recruteur mis à jour', 'success');
-          this.editMode = false;
-          this.ngOnInit(); // recharger le profil mis à jour
-        },
-        error: (error) => {
-          console.error("Erreur lors de la mise à jour du profil recruteur", error);
-          this.openSnack(
-            "❌ Erreur mise à jour du profil : " + (error.message || error.statusText || "Erreur inconnue"),
-            "error"
-          );
-
-        }
-      });
-    } else {
-      console.warn('submitProfileUpdate: rôle non recruteur, pas de traitement');
-    }
-    if (this.isAdmin) {
-      this.talentService.updateAdminProfile(this.user.id, updatedData).subscribe({
-        next: (response) => {
-          console.log('Réponse updateAdmin:', response);
-          this.openSnack('✅ Profil admin mis à jour', 'success');
-          this.editMode = false;
-          this.ngOnInit(); // recharger le profil mis à jour
-        },
-        error: (error) => {
-          console.error("Erreur lors de la mise à jour du profil admin", error);
-          this.openSnack(
-            "❌ Erreur mise à jour du profil : " + (error.message || error.statusText || "Erreur inconnue"),
-            "error"
-          );
-
-        }
-      });
-    } else {
-      console.warn('submitProfileUpdate: rôle non admin, pas de traitement');
-    }
-
+  if (!this.user?.id) {
+    console.warn('submitProfileUpdate: user.id non défini');
+    return;
   }
+
+  if (!this.editForm.valid) {
+    console.warn('submitProfileUpdate: formulaire invalide', this.editForm.value);
+    return;
+  }
+
+  const updatedData = this.editForm.getRawValue();
+  console.log('Données à envoyer pour mise à jour :', updatedData);
+
+  // ✅ CANDIDAT
+  if (this.isCandidat) {
+    this.talentService.updateCandidatProfile(this.user.id, updatedData).subscribe({
+      next: (response) => {
+        console.log('Réponse updateCandidat:', response);
+        this.openSnack('✅ Profil candidat mis à jour', 'success');
+        this.editMode = false;
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Erreur mise à jour candidat', error);
+        this.openSnack('❌ Erreur mise à jour du profil candidat', 'error');
+      }
+    });
+    return;
+  }
+
+  // ✅ RECRUTEUR
+  if (this.isRecruteur) {
+    this.talentService.updateRecruteurProfile(this.user.id, updatedData).subscribe({
+      next: (response) => {
+        console.log('Réponse updateRecruteur:', response);
+        this.openSnack('✅ Profil recruteur mis à jour', 'success');
+        this.editMode = false;
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Erreur mise à jour recruteur', error);
+        this.openSnack('❌ Erreur mise à jour du profil recruteur', 'error');
+      }
+    });
+    return;
+  }
+
+  // ✅ EMPLOYEUR
+  if (this.isEmployeur) {
+    this.talentService.updateEmployeurProfile(this.user.id, updatedData).subscribe({
+      next: (response) => {
+        console.log('Réponse updateEmployeur:', response);
+        this.openSnack('✅ Profil employeur mis à jour', 'success');
+        this.editMode = false;
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Erreur mise à jour employeur', error);
+        this.openSnack('❌ Erreur mise à jour du profil employeur', 'error');
+      }
+    });
+    return;
+  }
+
+  // ✅ ADMIN
+  if (this.isAdmin) {
+    this.talentService.updateAdminProfile(this.user.id, updatedData).subscribe({
+      next: (response) => {
+        console.log('Réponse updateAdmin:', response);
+        this.openSnack('✅ Profil admin mis à jour', 'success');
+        this.editMode = false;
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Erreur mise à jour admin', error);
+        this.openSnack('❌ Erreur mise à jour du profil admin', 'error');
+      }
+    });
+    return;
+  }
+
+  // 🚨 Si aucun rôle reconnu
+  console.warn('submitProfileUpdate: rôle non pris en charge', this.user?.role);
+}
+
 
   onReplaceCvClick(cvId: number): void {
     this.replaceCvId = cvId; // Affiche l'input

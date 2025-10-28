@@ -50,10 +50,22 @@
           <input matInput [(ngModel)]="offre.pays" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="flex: 1; min-width: 150px;">
+        <mat-form-field appearance="outline" style="flex: 1; min-width: 200px;">
           <mat-label>Catégorie</mat-label>
-          <input matInput [(ngModel)]="offre.categorie" />
+          <mat-select [(ngModel)]="offre.categorie" name="categorie">
+            <mat-option value="DEVELOPPEMENT INGENIERIE">Développement / Ingénierie</mat-option>
+            <mat-option value="ARCHITECTURE">Architecture</mat-option>
+            <mat-option value="ANALYSTE">Analyse d’affaires (fonctionnelle et technique)</mat-option>
+            <mat-option value="ASSURANCE QUALITE">Test / Assurance qualité</mat-option>
+            <mat-option value="GESTION PROJET">Gestion de projets</mat-option>
+            <mat-option value="ADMIN BD">Administration de base de données</mat-option>
+            <mat-option value="INFRASTRUCTURE">Infrastructure / Nuage (Cloud)</mat-option>
+            <mat-option value="IA">Technologies numériques émergentes (IA)</mat-option>
+            <mat-option value="CYBERSECURITE">Cybersécurité</mat-option>
+            <mat-option value="AUTRE">Autre</mat-option>
+          </mat-select>
         </mat-form-field>
+
       </div>
 
       <!-- DESCRIPTION -->

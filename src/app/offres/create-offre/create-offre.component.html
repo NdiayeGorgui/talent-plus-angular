@@ -20,12 +20,27 @@
         </div>
 
         <!-- Catégorie -->
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Catégorie</mat-label>
-          <input matInput formControlName="categorie" placeholder="Ex: Développement/ingénierie">
-          <mat-error *ngIf="offreForm.get('categorie')?.hasError('required')">La catégorie est obligatoire</mat-error>
-          <mat-error *ngIf="offreForm.get('categorie')?.hasError('minlength')">Minimum 2 caractères</mat-error>
+          <mat-select formControlName="categorie" required>
+            <mat-option value="DEVELOPPEMENT INGENIERIE">Développement / Ingénierie</mat-option>
+            <mat-option value="ARCHITECTURE">Architecture</mat-option>
+            <mat-option value="ANALYSTE">Analyse d’affaires (fonctionnelle et technique)</mat-option>
+            <mat-option value="ASSURANCE QUALITE">Test / Assurance qualité</mat-option>
+            <mat-option value="GESTION PROJET">Gestion de projets</mat-option>
+            <mat-option value="ADMIN BD">Administration de base de données</mat-option>
+            <mat-option value="INFRASTRUCTURE">Infrastructure / Nuage (Cloud)</mat-option>
+            <mat-option value="IA">Technologies numériques émergentes (IA)</mat-option>
+            <mat-option value="CYBERSECURITE">Cybersécurité</mat-option>
+            <mat-option value="AUTRE">Autre</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="offreForm.get('categorie')?.hasError('required')">
+            La catégorie est obligatoire
+          </mat-error>
         </mat-form-field>
+
 
         <!-- Ville -->
         <mat-form-field appearance="outline" class="full-width">

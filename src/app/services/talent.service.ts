@@ -250,6 +250,10 @@ export class TalentService {
     return this.httpClient.put<UserProfileDTO>(`${environment.backendRecruteurHost}/${id}`, recruteur);
   }
 
+   updateEmployeurProfile(id: number, employeur: EmployeurDTO): Observable<UserProfileDTO> {
+    return this.httpClient.put<UserProfileDTO>(`${environment.backendEmployeurHost}/${id}`, employeur);
+  }
+
   updateAdminProfile(id: number, admin: AdminDTO): Observable<UserProfileDTO> {
     return this.httpClient.put<UserProfileDTO>(`${environment.backendRecruteurHost}/admin/${id}`, admin);
   }

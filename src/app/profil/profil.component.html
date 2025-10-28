@@ -9,78 +9,177 @@
     </mat-card-actions>
 
     <!-- Affichage du profil (lecture seule) -->
-    <mat-card-content *ngIf="!editMode">
+    <!-- ✅ CANDIDAT -->
+<mat-card-content *ngIf="!editMode && isCandidat">
+  <p><strong>Nom :</strong> {{ user.nom }}</p>
+  <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+  <p><strong>Email :</strong> {{ user.email }}</p>
+  <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+  <p><strong>Date de naissance :</strong> {{ user.dateNaissance | date }}</p>
+  <p><strong>Adresse :</strong> {{ user.adresse }}</p>
+  <p><strong>Niveau d'étude :</strong> {{ user.niveauEtude }}</p>
+</mat-card-content>
 
-      <p *ngIf="user.nom"><strong>Nom :</strong> {{ user.nom }}</p>
-      <p *ngIf="user.prenom"><strong>Prénom :</strong> {{ user.prenom }}</p>
-      <p *ngIf="user.telephone"><strong>Tél :</strong> {{ user.telephone }}</p>
-      <p *ngIf="user.emailContact"><strong>Email :</strong> {{ user.emailContact }}</p>
-      <p *ngIf="user.email"><strong>Email :</strong> {{ user.email }}</p>
-      <p *ngIf="user.poste"><strong>Poste:</strong> {{ user.poste }}</p>
-      <p *ngIf="user.dateNaissance"><strong>Naissance :</strong> {{ user.dateNaissance | date }}</p>
-      <p *ngIf="user.adresse"><strong>Adresse :</strong> {{ user.adresse }}</p>
-      <p *ngIf="user.niveauEtude"><strong>Niveau d'étude :</strong> {{ user.niveauEtude }}</p>
-      <p *ngIf="user.niveau && !isCandidat"><strong>Niveau :</strong> {{ user.niveau }}</p>
-    </mat-card-content>
+<!-- ✅ RECRUTEUR -->
+<mat-card-content *ngIf="!editMode && isRecruteur">
+  <p><strong>Nom :</strong> {{ user.nom }}</p>
+  <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+  <p><strong>Email :</strong> {{ user.email }}</p>
+  <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+  <p><strong>Poste :</strong> {{ user.poste }}</p>
+</mat-card-content>
+
+<!-- ✅ EMPLOYEUR -->
+<mat-card-content *ngIf="!editMode && isEmployeur">
+  <p><strong>Nom de l’entreprise :</strong> {{ user.nom }}</p>
+  <p><strong>Email de contact :</strong> {{ user.emailContact }}</p>
+  <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+  <p><strong>Poste du contact :</strong> {{ user.poste }}</p>
+</mat-card-content>
+
+<!-- ✅ ADMIN -->
+<mat-card-content *ngIf="!editMode && isAdmin">
+  <p><strong>Nom :</strong> {{ user.nom }}</p>
+  <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+  <p><strong>Email :</strong> {{ user.email }}</p>
+  <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+  <p><strong>Poste :</strong> {{ user.poste }}</p>
+</mat-card-content>
+
 
 
     <!-- Formulaire de modification dynamique -->
-    <form *ngIf="editMode" [formGroup]="editForm" (ngSubmit)="submitProfileUpdate()">
-      <mat-form-field appearance="fill">
-        <mat-label>Nom</mat-label>
-        <input matInput formControlName="nom" />
-      </mat-form-field>
+<form *ngIf="editMode" [formGroup]="editForm" (ngSubmit)="submitProfileUpdate()">
 
-      <mat-form-field appearance="fill">
-        <mat-label>Prénom</mat-label>
-        <input matInput formControlName="prenom" />
-      </mat-form-field>
+  <!-- ✅ CANDIDAT -->
+  <ng-container *ngIf="isCandidat">
+    <mat-form-field appearance="fill">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput [disabled]="true" formControlName="email" />
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="prenom" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="editForm.get('telephone')">
-        <mat-label>Téléphone</mat-label>
-        <input matInput formControlName="telephone" />
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [disabled]="true" formControlName="email" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="editForm.get('poste')">
-        <mat-label>Poste</mat-label>
-        <input matInput formControlName="poste" />
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="editForm.get('dateNaissance')">
-        <mat-label>Date de naissance</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dateNaissance" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Date de naissance</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateNaissance" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="editForm.get('adresse')">
-        <mat-label>Adresse</mat-label>
-        <input matInput formControlName="adresse" />
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="adresse" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="editForm.get('niveauEtude')">
-        <mat-label>Niveau d'étude</mat-label>
-        <input matInput formControlName="niveauEtude" />
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" *ngIf="editForm.get('niveau') && !isCandidat">
-        <mat-label>Niveau</mat-label>
-        <input matInput formControlName="niveau" />
-      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Niveau d'étude</mat-label>
+      <input matInput formControlName="niveauEtude" />
+    </mat-form-field>
+  </ng-container>
 
 
-      <div class="mt-3">
-        <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
-          💾 Enregistrer
-        </button>
-        <button mat-button type="button" (click)="cancelEdit()">❌ Annuler</button>
-      </div>
-    </form>
+  <!-- ✅ RECRUTEUR -->
+  <ng-container *ngIf="isRecruteur">
+    <mat-form-field appearance="fill">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="prenom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [disabled]="true" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Poste</mat-label>
+      <input matInput formControlName="poste" />
+    </mat-form-field>
+  </ng-container>
+
+
+  <!-- ✅ EMPLOYEUR -->
+  <ng-container *ngIf="isEmployeur">
+    <mat-form-field appearance="fill">
+      <mat-label>Nom de l’entreprise</mat-label>
+      <input matInput formControlName="nom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email de contact</mat-label>
+      <input matInput [disabled]="true" formControlName="emailContact" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Poste du contact</mat-label>
+      <input matInput formControlName="poste" />
+    </mat-form-field>
+  </ng-container>
+
+
+  <!-- ✅ ADMIN -->
+  <ng-container *ngIf="isAdmin">
+    <mat-form-field appearance="fill">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="prenom" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [disabled]="true" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Poste</mat-label>
+      <input matInput formControlName="poste" />
+    </mat-form-field>
+  </ng-container>
+
+  <div class="mt-3">
+    <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
+      💾 Enregistrer
+    </button>
+    <button mat-button type="button" (click)="cancelEdit()">❌ Annuler</button>
+  </div>
+</form>
   </mat-card>
 
   <!-- Section spécifique au CANDIDAT -->
